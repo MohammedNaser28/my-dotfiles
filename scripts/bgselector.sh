@@ -125,8 +125,11 @@ select_output() {
 select_wallpaper() {
     local prompt="${1:-Select wallpaper}"
     local chosen
-    chosen=$(cat "$CACHE_INDEX" \
-        | vicinae dmenu -n " Wallpaper " -s "{count} wallpapers" -p "$prompt" -W 800)
+    chosen=$(while read -r abs; do
+        # Show "folder/filename" for display; absolute path triggers quick look preview
+        echo "$abs"
+    done < "$CACHE_INDEX" \
+        | vicinae dmenu -n " Wallpaper " -s "{count} wallpapers" -p "$prompt" -W 800 --no-metadata)
 
     # Return relative path from absolute
     echo "${chosen#$WALL_DIR/}"
