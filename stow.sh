@@ -29,6 +29,8 @@ ln -sf "$DOT/scripts/keybinds.json" "$HOME/.local/bin/keybinds.json"
 ln -sf "$DOT/scripts/keybinds-view.sh" "$HOME/.local/bin/keybinds-view"
 ln -sf "$DOT/scripts/keybinds-manager.sh" "$HOME/.local/bin/keybinds-manager"
 ln -sf "$DOT/scripts/keycapture.sh" "$HOME/.local/bin/keycapture"
+echo "==> Building keycap (evdev key capture)..."
+gcc -O2 -o "$HOME/.local/bin/keycap" "$DOT/scripts/keycap.c" 2>/dev/null && echo "  keycap" || echo "  keycap (build failed)"
   echo "  scripts"
 
 echo "==> Done! All dotfiles linked."
