@@ -125,12 +125,11 @@ select_output() {
 select_wallpaper() {
     local prompt="${1:-Select wallpaper}"
     local chosen
-    chosen=$(while read -r img; do
-        rel_path="${img#$WALL_DIR/}"
-        echo "$rel_path"
-    done < "$CACHE_INDEX" | vicinae dmenu -n " Wallpaper " -s "{count} wallpapers" -p "$prompt" -W 800)
+    chosen=$(cat "$CACHE_INDEX" \
+        | vicinae dmenu -n " Wallpaper " -s "{count} wallpapers" -p "$prompt" -W 800)
 
-    echo "$chosen"
+    # Return relative path from absolute
+    echo "${chosen#$WALL_DIR/}"
 }
 
 apply_wallpaper() {
