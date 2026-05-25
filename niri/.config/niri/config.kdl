@@ -69,7 +69,7 @@ binds {
     MOD+RETURN                          hotkey-overlay-title="Open Terminal: alacritty" { spawn-sh "alacritty"; }
     MOD+ALT+RETURN                      hotkey-overlay-title="Open Terminal: kitty" { spawn-sh "kitty"; }
     MOD+ALT+B                         hotkey-overlay-title="Open Secondary Browser: chrome" { spawn-sh "google-chrome-stable --enable-features=TouchpadOverscrollHistoryNavigation"; }
-    MOD+SHIFT+Q                         hotkey-overlay-title="Lock Screen: blurred screenshot" { spawn-sh "$HOME/.config/scripts/lockscreen"; }
+    MOD+SHIFT+Q                         hotkey-overlay-title="Lock Screen" { spawn-sh "$HOME/.config/scripts/lockscreen.sh"; }
     MOD+A                               hotkey-overlay-title="Open App Launcher: vicinae" { spawn-sh "vicinae toggle"; }
     MOD+B                               hotkey-overlay-title="Open Browser: firefox" { spawn-sh "firefox-developer-edition"; }
     MOD+E                               hotkey-overlay-title="File Manager: Thunar" { spawn-sh "thunar"; }
@@ -206,8 +206,8 @@ binds {
     MOD+U                               hotkey-overlay-title="Lock Screen Theme" { spawn-sh "$HOME/.config/scripts/gtklock-theme.sh"; }
 
     // Keybind Viewer & Manager
-    MOD+SLASH                           hotkey-overlay-title="Show Keybind Reference" { spawn-sh "keybinds-view"; }
-    MOD+SHIFT+SLASH                     hotkey-overlay-title="Keybind Manager" { spawn-sh "keybinds-manager"; }
+    MOD+SLASH                           hotkey-overlay-title="Show Keybind Reference" { spawn-sh "$HOME/.config/scripts/keybinds-view.sh"; }
+    MOD+SHIFT+SLASH                     hotkey-overlay-title="Keybind Manager" { spawn-sh "$HOME/.config/scripts/keybinds-manager.sh"; }
 
     // Application Restarts
     MOD+ALT+W                           { spawn "sh" "-c" "pgrep -x waybar >/dev/null && killall waybar || waybar &"; }
