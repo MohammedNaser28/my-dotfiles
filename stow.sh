@@ -54,4 +54,4 @@ gcc -O2 -o "$HOME/.local/bin/kbind-daemon" "$DOT/scripts/kbind-daemon.c" 2>/dev/
   echo "  scripts"
 
 echo "==> Done! All dotfiles linked."
-echo "    Upstream (original): git remote add upstream https://github.com/saatvik333/niri-dotfiles.git"
+echo "    Forked from: https://github.com/saatvik333/niri-dotfiles.git"
