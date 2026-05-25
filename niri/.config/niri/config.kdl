@@ -69,7 +69,7 @@ binds {
     MOD+RETURN                          hotkey-overlay-title="Open Terminal: alacritty" { spawn-sh "alacritty"; }
     MOD+ALT+RETURN                      hotkey-overlay-title="Open Terminal: kitty" { spawn-sh "kitty"; }
     MOD+ALT+B                         hotkey-overlay-title="Open Secondary Browser: chrome" { spawn-sh "google-chrome-stable --enable-features=TouchpadOverscrollHistoryNavigation"; }
-    MOD+SHIFT+Q                         hotkey-overlay-title="Lock Screen: gtklock" { spawn-sh "gtklock"; }
+    MOD+SHIFT+Q                         hotkey-overlay-title="Lock Screen: blurred screenshot" { spawn-sh "$HOME/.config/scripts/lockscreen"; }
     MOD+A                               hotkey-overlay-title="Open App Launcher: vicinae" { spawn-sh "vicinae toggle"; }
     MOD+B                               hotkey-overlay-title="Open Browser: firefox" { spawn-sh "firefox-developer-edition"; }
     MOD+E                               hotkey-overlay-title="File Manager: Thunar" { spawn-sh "thunar"; }
