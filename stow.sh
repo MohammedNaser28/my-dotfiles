@@ -21,13 +21,14 @@ stow -d "$DOT" -t "$HOME" git 2>/dev/null && echo "  git"
 
 echo "==> Symlinking scripts..."
 mkdir -p "$HOME/.local/bin"
-for script in bgselector.sh git-cleanup.sh gpu-stats.sh kb-layout.sh low-battery-notify.sh media-control.sh theme-sync.sh keybinds-view.sh keybinds-manager.sh; do
+for script in bgselector.sh git-cleanup.sh gpu-stats.sh kb-layout.sh low-battery-notify.sh media-control.sh theme-sync.sh keybinds-view.sh keybinds-manager.sh keycapture.sh; do
     ln -sf "$DOT/scripts/$script" "$HOME/.local/bin/$script"
 done
 ln -sf "$DOT/scripts/lib" "$HOME/.local/bin/lib"
 ln -sf "$DOT/scripts/keybinds.json" "$HOME/.local/bin/keybinds.json"
 ln -sf "$DOT/scripts/keybinds-view.sh" "$HOME/.local/bin/keybinds-view"
 ln -sf "$DOT/scripts/keybinds-manager.sh" "$HOME/.local/bin/keybinds-manager"
+ln -sf "$DOT/scripts/keycapture.sh" "$HOME/.local/bin/keycapture"
   echo "  scripts"
 
 echo "==> Done! All dotfiles linked."

@@ -56,7 +56,7 @@ view_keybinds() {
 add_keybind() {
     local bind action desc exec_cmd
 
-    bind=$(input "Add: enter keybind (e.g. MOD + Shift + X)")
+    bind=$(keycapture 2>/dev/null)
     [ -z "$bind" ] && return
 
     action=$(input "Add: enter action name")
@@ -108,7 +108,7 @@ edit_keybind() {
 
     local new_bind new_action new_desc new_exec
 
-    new_bind=$(input "Edit: keybind [$bind]" <<< "" )
+    new_bind=$(keycapture 2>/dev/null)
     [ -z "$new_bind" ] && new_bind="$bind"
 
     new_action=$(input "Edit: action [$action]" <<< "" )
