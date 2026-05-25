@@ -1,0 +1,13 @@
+[Unit]
+Description=Re-bind evdev keys invisible to niri (ASUS Fn keys)
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=%h/.local/bin/kbind-daemon -f
+Restart=on-failure
+RestartSec=2
+Type=simple
+
+[Install]
+WantedBy=default.target

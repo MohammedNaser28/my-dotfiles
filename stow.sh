@@ -6,7 +6,7 @@ set -euo pipefail
 DOT="$(cd "$(dirname "$0")" && pwd)"
 
 echo "==> Stowing .config/ packages..."
-for pkg in alacritty fastfetch fish gtklock kitty mako niri nvim rofi systemd vicinae wallust waybar yazi zathura hypr btop opencode; do
+for pkg in alacritty fastfetch fish gtklock kitty mako niri nvim rofi systemd vicinae wallust waybar yazi zathura hypr btop opencode kbind-daemon; do
     stow -d "$DOT" -t "$HOME" "$pkg" 2>/dev/null && echo "  $pkg" || echo "  $pkg (skipped)"
 done
 
@@ -30,8 +30,9 @@ ln -sf "$DOT/scripts/keybinds-view.sh" "$HOME/.local/bin/keybinds-view"
 ln -sf "$DOT/scripts/keybinds-manager.sh" "$HOME/.local/bin/keybinds-manager"
 ln -sf "$DOT/scripts/keycapture.sh" "$HOME/.local/bin/keycapture"
 ln -sf "$DOT/scripts/mediactl" "$HOME/.local/bin/mediactl"
-echo "==> Building keycap (evdev key capture)..."
+echo "==> Building evdev tools..."
 gcc -O2 -o "$HOME/.local/bin/keycap" "$DOT/scripts/keycap.c" 2>/dev/null && echo "  keycap" || echo "  keycap (build failed)"
+gcc -O2 -o "$HOME/.local/bin/kbind-daemon" "$DOT/scripts/kbind-daemon.c" 2>/dev/null && echo "  kbind-daemon" || echo "  kbind-daemon (build failed)"
   echo "  scripts"
 
 echo "==> Done! All dotfiles linked."

@@ -79,13 +79,8 @@ binds {
     // Media Keys
     XF86AudioRaiseVolume                allow-when-locked=true { spawn-sh "mediactl volume_up"; }
     XF86AudioLowerVolume                allow-when-locked=true { spawn-sh "mediactl volume_down"; }
-    // ASUS TUF Fn keys use wrong XKB codes; match by raw evdev keycode instead
-    keycode:115                         allow-when-locked=true { spawn-sh "mediactl volume_up"; }
-    keycode:114                         allow-when-locked=true { spawn-sh "mediactl volume_down"; }
     XF86MonBrightnessUp                 allow-when-locked=true { spawn-sh "mediactl brightness_up"; }
     XF86MonBrightnessDown               allow-when-locked=true { spawn-sh "mediactl brightness_down"; }
-    keycode:225                         allow-when-locked=true { spawn-sh "mediactl brightness_up"; }
-    keycode:224                         allow-when-locked=true { spawn-sh "mediactl brightness_down"; }
     XF86AudioMute                       allow-when-locked=true { spawn-sh "mediactl volume_mute"; }
     XF86AudioMicMute                    allow-when-locked=true { spawn-sh "mediactl mic_mute"; }
     XF86AudioNext                       allow-when-locked=true { spawn-sh "mediactl next_track"; }
