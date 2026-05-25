@@ -8,6 +8,7 @@ ExecStart=%h/.local/bin/kbind-daemon -f
 Restart=on-failure
 RestartSec=2
 Type=simple
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
 
 [Install]
 WantedBy=default.target
