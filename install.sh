@@ -1147,8 +1147,9 @@ clone_or_update_dotfiles() {
     warn "Failed to update submodules after retries. Continuing anyway..."
   fi
 
-  info "Pulling LFS objects for wallpapers..."
+  info "Initializing git-lfs and pulling LFS objects..."
   if command -v git-lfs &>/dev/null; then
+    git lfs install --skip-repo >> "${LOG_FILE}" 2>&1 || true
     if git -C "${DOTDIR}/wallpapers" lfs pull >> "${LOG_FILE}" 2>&1; then
       msg "Wallpaper LFS objects pulled."
     else
@@ -1229,8 +1230,9 @@ install_wallpapers() {
   if [[ -d "${DOTDIR}/wallpapers" ]]; then
     info "Installing wallpapers..."
 
-    # Ensure LFS objects are pulled
+    # Ensure LFS filters are configured and objects are pulled
     if command -v git-lfs &>/dev/null; then
+      git lfs install --skip-repo >> "${LOG_FILE}" 2>&1 || true
       git -C "${DOTDIR}/wallpapers" lfs pull >> "${LOG_FILE}" 2>&1 || warn "Failed to pull LFS wallpaper data"
     fi
 
