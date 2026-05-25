@@ -63,7 +63,7 @@ readonly PACMAN_PACKAGES=(
   niri waybar fish fastfetch mako alacritty kitty starship neovim yazi
   zathura zathura-pdf-mupdf ttf-jetbrains-mono-nerd
   qt5-wayland qt6-wayland polkit-gnome ffmpeg imagemagick unzip jq
-  gtklock rofi curl libnotify
+  gtklock rofi curl libnotify brightnessctl playerctl acpi
 )
 
 # ==========================
@@ -904,7 +904,7 @@ verify_all_binaries() {
   local missing_binaries=()
   local binaries_to_check=(
     niri waybar fish fastfetch mako alacritty kitty starship
-    nvim yazi vicinae gtklock zathura wallust awww rofi
+    nvim yazi vicinae gtklock zathura wallust awww rofi thunar
   )
 
   for binary in "${binaries_to_check[@]}"; do
@@ -1451,6 +1451,16 @@ main() {
   step "Creating Symbolic Links"
   create_symlinks
   add_summary "Configuration symlinks created in ~/.config"
+
+  step "Building evdev tools (keycap, kbind-daemon)"
+  # shellcheck disable=SC2153
+  if command -v gcc &>/dev/null; then
+    gcc -O2 -o "${HOME}/.local/bin/keycap" "${DOTDIR}/scripts/keycap.c" 2>/dev/null && msg "  keycap" || warn "  keycap build failed"
+    gcc -O2 -o "${HOME}/.local/bin/kbind-daemon" "${DOTDIR}/scripts/kbind-daemon.c" 2>/dev/null && msg "  kbind-daemon" || warn "  kbind-daemon build failed"
+  else
+    warn "gcc not found, skipping evdev tool builds"
+  fi
+  add_summary "Evdev tools built"
 
   step "Installing Wallpapers"
   install_wallpapers

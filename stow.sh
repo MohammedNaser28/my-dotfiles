@@ -5,6 +5,9 @@
 set -euo pipefail
 DOT="$(cd "$(dirname "$0")" && pwd)"
 
+echo "==> Initializing git submodules..."
+git -C "$DOT" submodule update --init --recursive 2>/dev/null && echo "  wallpapers" || echo "  (no submodules)"
+
 echo "==> Stowing .config/ packages..."
 for pkg in alacritty fastfetch fish gtklock kitty mako niri nvim rofi systemd vicinae wallust waybar yazi zathura hypr btop opencode kbind-daemon; do
     stow -d "$DOT" -t "$HOME" "$pkg" 2>/dev/null && echo "  $pkg" || echo "  $pkg (skipped)"
@@ -21,6 +24,8 @@ stow -d "$DOT" -t "$HOME" git 2>/dev/null && echo "  git"
 
 echo "==> Symlinking scripts..."
 mkdir -p "$HOME/.local/bin"
+# ~/.config/scripts -> dotfiles/scripts (so $HOME/.config/scripts/* paths work)
+ln -sfT "$DOT/scripts" "$HOME/.config/scripts"
 for script in bgselector.sh git-cleanup.sh gpu-stats.sh kb-layout.sh low-battery-notify.sh media-control.sh theme-sync.sh keybinds-view.sh keybinds-manager.sh keycapture.sh; do
     ln -sf "$DOT/scripts/$script" "$HOME/.local/bin/$script"
 done
