@@ -1,19 +1,17 @@
 #!/usr/bin/env bash
-# Keybind reference viewer — rofi-based, searchable, styled
+# Keybind reference viewer — vicinae dmenu, styled like vicinae
 # Reads ~/.config/scripts/keybinds.json
 
 set -euo pipefail
 
 BINDS_FILE="${HOME}/.config/scripts/keybinds.json"
-WALLUST_COLORS="${HOME}/.config/rofi/colors/wallust.rasi"
-FONT="JetBrainsMono Nerd Font Propo 14"
 
 if [ ! -f "$BINDS_FILE" ]; then
     notify-send "Keybinds" "keybinds.json not found at $BINDS_FILE"
     exit 1
 fi
 
-# Build rofi entries: "keybind | action | description"
+# Build vicinae dmenu entries: "keybind │ action │ description"
 entries=$(jq -r '.categories[]
     | .name as $cat
     | .entries[]
@@ -22,16 +20,11 @@ entries=$(jq -r '.categories[]
 
 total=$(echo "$entries" | wc -l)
 
-chosen=$(echo "$entries" | rofi -dmenu -i -p " Keybinds " \
-    -theme "$WALLUST_COLORS" \
-    -font "$FONT" \
-    -theme-str "window {width: 900px;}
-listview {lines: $total; columns: 1; dynamic: true; spacing: 4px; padding: 8px;}
-element {padding: 6px 12px; orientation: horizontal;}
-element-text {margin: 0px;}
-inputbar {padding: 8px; children: [prompt,entry];}
-prompt {padding: 0 8px;}" \
-    -lines "$total")
+chosen=$(echo "$entries" | vicinae dmenu \
+    -n " Keybinds " \
+    -s "{count} keybinds" \
+    -p "Search keybinds..." \
+    -W 900)
 
 # Exit silently if nothing selected
 [ -z "$chosen" ] && exit 0
