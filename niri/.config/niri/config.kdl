@@ -78,9 +78,13 @@ binds {
 
     // Media Keys
     XF86AudioRaiseVolume                allow-when-locked=true { spawn-sh "mediactl volume_up"; }
+    volumeup                            allow-when-locked=true { spawn-sh "mediactl volume_up"; }
     XF86AudioLowerVolume                allow-when-locked=true { spawn-sh "mediactl volume_down"; }
+    volumedown                          allow-when-locked=true { spawn-sh "mediactl volume_down"; }
     XF86MonBrightnessUp                 allow-when-locked=true { spawn-sh "mediactl brightness_up"; }
+    brightnessup                        allow-when-locked=true { spawn-sh "mediactl brightness_up"; }
     XF86MonBrightnessDown               allow-when-locked=true { spawn-sh "mediactl brightness_down"; }
+    brightnessdown                      allow-when-locked=true { spawn-sh "mediactl brightness_down"; }
     XF86AudioMute                       allow-when-locked=true { spawn-sh "mediactl volume_mute"; }
     XF86AudioMicMute                    allow-when-locked=true { spawn-sh "mediactl mic_mute"; }
     XF86AudioNext                       allow-when-locked=true { spawn-sh "mediactl next_track"; }
