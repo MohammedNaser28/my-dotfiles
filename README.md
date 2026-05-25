@@ -1,37 +1,15 @@
-# Niri WM Dotfiles
+# Dotfiles
 
-<div align="center">
+Fork of [saatvik333/niri-dotfiles](https://github.com/saatvik333/niri-dotfiles) restructured for **GNU stow** symlink management.
 
-**A productive and clean [Niri](https://github.com/YaLTeR/niri) configuration setup**  
-_Dynamic theming • Borderless layouts • Minimal_
-
----
-
-### Gallery
-
-<table>
-  <tr>
-    <td><img src="https://github.com/user-attachments/assets/b9221fe9-6e8f-4e26-b2a4-a67170512824" alt="Desktop View"/></td>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/user-attachments/assets/c1184029-71d6-49a7-abb1-57661f738bad" alt="Workspace View"/></td>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/user-attachments/assets/fba3cdae-5bbf-497c-b9f8-0cbd11c64d49" alt="Application Launcher"/></td>
-  </tr>
-</table>
+**Upstream** is preserved at `git@github.com:saatvik333/niri-dotfiles.git` for pulling updates.
 
 ---
-
-</div>
 
 ## Contents
 
-- [Features](#features)
-- [Automatic Installation](#automatic-installation-recommended)
-- [What Gets Installed](#what-gets-installed)
+- [Tracked Packages](#tracked-packages)
 - [Themes](#themes)
-- [Preconfigured Tools](#preconfigured-tools)
 - [Keybinds](#keybinds)
   - [System & Shortcuts](#system--shortcuts)
   - [Applications](#applications)
@@ -43,82 +21,39 @@ _Dynamic theming • Borderless layouts • Minimal_
   - [Window Modes](#window-modes)
   - [Utilities](#utilities)
 
-## Features
+## Usage
 
-- Clean borderless, gapless minimal look
-- Dynamic theme switching system-wide
-- Out-of-Box preconfigured for all popular themes and applications
-- Rust-powered tooling and packages (rust go brrr...)
+### Deploy on a new machine
 
-## Automatic Installation (Recommended)
-
-For Arch Linux and Arch-based distributions (Manjaro, EndeavourOS, etc.):
+Requires [GNU stow](https://www.gnu.org/software/stow/):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/saatvik333/niri-dotfiles/main/install.sh | sh
+sudo pacman -S stow
+git clone <your-fork-url> ~/.dotfiles
+cd ~/.dotfiles
+./stow.sh
 ```
 
-**Important Requirements:**
+# Tracked Packages
 
-```
-  Fresh or minimal Arch Linux installation recommended
-  Active internet connection required
-  Sudo privileges needed
-  At least 5GB free disk space
-```
+`.config/` applications:
 
-What the Script Does
-
-The automated installer will:
-
-```
-   Verify system compatibility (Arch-based only)
-   Update your system packages
-   Install base development tools (git, base-devel, curl)
-   Set up AUR helper (yay)
-   Configure Rust toolchain
-   Install all required packages (niri, waybar, fish, etc.)
-   Install AUR packages (vicinae, wallust, etc.)
-   Install GTK themes (Colloid, Rose Pine, Osaka)
-   Install icon themes (Colloid icons)
-   Clone and configure dotfiles
-   Set up shell configuration (Fish/Zsh)
-   Create systemd services
-   Install wallpapers
-   Backup existing configurations
-```
-
-Installation Time: Approximately 15-30 minutes depending on your internet speed.
-
-# What Gets Installed
-
-Core Components
-
-    Window Manager: Niri (Scrollable-tiling Wayland compositor)
-    Status Bar: Waybar (Highly customizable)
-    Terminal: Alacritty, Kitty
-    Shell: Fish (with optional Zsh)
-    Notification Daemon: Mako
-    Application Launcher: Rofi
-    Screen Locker: GTKLock
-    Wallpaper Manager: awww
-
-Additional Tools
-
-    Editor: Neovim (preconfigured)
-    File Manager: Yazi (TUI), Thunar (GUI)
-    PDF Viewer: Zathura
-    System Info: Fastfetch
-    Theme Manager: Wallust
-    Prompt: Starship
-    Authentication: Polkit-gnome
-    Utilities: dust, eza, niri-switch
-
-Development Tools
-
-    Rust toolchain (rustup, cargo)
-    Base development packages
-    Git and build essentials
+- **WM**: Niri, Hyprland (standalone)
+- **Bar**: Waybar
+- **Terminals**: Alacritty, Kitty
+- **Shell**: Zsh, Fish
+- **Notifications**: Mako
+- **Launcher**: Rofi
+- **Locker**: GTKLock
+- **Editor**: Neovim (LazyVim)
+- **File manager**: Yazi
+- **PDF**: Zathura
+- **Info**: Fastfetch
+- **Theme**: Wallust, Starship
+- **Theming**: GTK 3/4 (colors & CSS), wallust templates
+- **System**: btop, systemd user services
+- **AI**: OpenCode config
+- **Input**: Vicinae (app launcher)
 
 ## Themes
 
@@ -136,19 +71,6 @@ Development Tools
 | Solarized  | [Osaka GTK Theme (Light/Dark)](https://github.com/Fausto-Korpsvart/Osaka-GTK-Theme)         | [Colloid Everforest (Light/Dark)](https://github.com/vinceliuice/Colloid-icon-theme) |
 
 Thanks to [vinceliuice](https://github.com/vinceliuice) and [Fausto-Korpsvart](https://github.com/Fausto-Korpsvart) for providing awesome GTK themes.
-
-## Preconfigured Tools
-
-- Neovim
-- Yazi
-- Rofi
-- Waybar
-- Fish
-- Fastfetch
-- Mako
-- Alacritty
-- Kitty
-- Starship
 
 ## Keybinds
 
