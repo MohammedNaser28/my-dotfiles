@@ -1,0 +1,115 @@
+{
+  "categories": [
+    {
+      "name": "System & Shortcuts",
+      "entries": [
+        { "bind": "MOD + Shift + Escape", "action": "Hotkey Overlay", "desc": "Built-in niri keybind overlay" }
+      ]
+    },
+    {
+      "name": "Applications",
+      "entries": [
+        { "bind": "MOD + Return", "action": "Terminal", "desc": "Open Alacritty terminal" },
+        { "bind": "MOD + Alt + Return", "action": "Terminal", "desc": "Open Kitty terminal" },
+        { "bind": "MOD + B", "action": "Browser", "desc": "Open Firefox Developer Edition" },
+        { "bind": "MOD + Alt + B", "action": "Browser", "desc": "Open Google Chrome" },
+        { "bind": "MOD + A", "action": "App Launcher", "desc": "Toggle Vicinae launcher" },
+        { "bind": "MOD + E", "action": "File Manager", "desc": "Open Thunar GUI" },
+        { "bind": "MOD + Alt + E", "action": "File Manager", "desc": "Open Yazi TUI" },
+        { "bind": "MOD + W", "action": "Wallpaper", "desc": "Open wallpaper selector" },
+        { "bind": "MOD + Shift + Q", "action": "Lock Screen", "desc": "Lock with GTKLock" }
+      ]
+    },
+    {
+      "name": "Media Controls",
+      "entries": [
+        { "bind": "XF86AudioRaiseVolume", "action": "Volume Up", "desc": "Increase audio volume" },
+        { "bind": "XF86AudioLowerVolume", "action": "Volume Down", "desc": "Decrease audio volume" },
+        { "bind": "XF86AudioMute", "action": "Mute", "desc": "Toggle audio mute" },
+        { "bind": "XF86AudioMicMute", "action": "Mic Mute", "desc": "Toggle microphone mute" },
+        { "bind": "XF86MonBrightnessUp", "action": "Brightness Up", "desc": "Increase screen brightness" },
+        { "bind": "XF86MonBrightnessDown", "action": "Brightness Down", "desc": "Decrease screen brightness" },
+        { "bind": "XF86AudioPlay", "action": "Play/Pause", "desc": "Toggle media playback" },
+        { "bind": "XF86AudioPause", "action": "Pause", "desc": "Pause media" },
+        { "bind": "XF86AudioNext", "action": "Next Track", "desc": "Skip to next track" },
+        { "bind": "XF86AudioPrev", "action": "Previous Track", "desc": "Go to previous track" }
+      ]
+    },
+    {
+      "name": "Window Management",
+      "entries": [
+        { "bind": "MOD + Q", "action": "Close Window", "desc": "Close the focused window" },
+        { "bind": "MOD + H / Left", "action": "Focus Left", "desc": "Focus column or window left" },
+        { "bind": "MOD + J / Down", "action": "Focus Down", "desc": "Focus workspace down / window down" },
+        { "bind": "MOD + K / Up", "action": "Focus Up", "desc": "Focus workspace up / window up" },
+        { "bind": "MOD + L / Right", "action": "Focus Right", "desc": "Focus column or window right" },
+        { "bind": "MOD + Home", "action": "Focus First", "desc": "Focus first column" },
+        { "bind": "MOD + End", "action": "Focus Last", "desc": "Focus last column" },
+        { "bind": "MOD + Shift + H / Left", "action": "Move Left", "desc": "Move column left" },
+        { "bind": "MOD + Shift + J", "action": "Move to Workspace Down", "desc": "Move column to workspace below" },
+        { "bind": "MOD + Shift + K", "action": "Move to Workspace Up", "desc": "Move column to workspace above" },
+        { "bind": "MOD + Shift + L / Right", "action": "Move Right", "desc": "Move column right" },
+        { "bind": "MOD + Shift + Down", "action": "Move Window Down", "desc": "Move window down within column" },
+        { "bind": "MOD + Shift + Up", "action": "Move Window Up", "desc": "Move window up within column" },
+        { "bind": "MOD + Shift + Home", "action": "Move to First", "desc": "Move column to first position" },
+        { "bind": "MOD + Shift + End", "action": "Move to Last", "desc": "Move column to last position" }
+      ]
+    },
+    {
+      "name": "Workspace Management",
+      "entries": [
+        { "bind": "MOD + 1-9", "action": "Switch Workspace", "desc": "Switch to workspace 1-9" },
+        { "bind": "MOD + Shift + 1-9", "action": "Move to Workspace", "desc": "Move window to workspace 1-9" },
+        { "bind": "MOD + Tab", "action": "Previous Workspace", "desc": "Switch to previous workspace" },
+        { "bind": "MOD + Escape", "action": "Overview", "desc": "Toggle workspace overview" },
+        { "bind": "MOD + Scroll Up/Down", "action": "Workspace Navigation", "desc": "Focus previous/next workspace" },
+        { "bind": "MOD + Shift + Scroll Up/Down", "action": "Move to Workspace", "desc": "Move column to workspace" }
+      ]
+    },
+    {
+      "name": "Monitor Management",
+      "entries": [
+        { "bind": "MOD + Ctrl + H / Left", "action": "Focus Monitor Left", "desc": "Focus monitor to the left" },
+        { "bind": "MOD + Ctrl + L / Right", "action": "Focus Monitor Right", "desc": "Focus monitor to the right" },
+        { "bind": "MOD + Ctrl + K / Up", "action": "Focus Monitor Up", "desc": "Focus monitor above" },
+        { "bind": "MOD + Ctrl + J / Down", "action": "Focus Monitor Down", "desc": "Focus monitor below" },
+        { "bind": "MOD + Shift + Ctrl + H / Left", "action": "Move to Monitor Left", "desc": "Move column to left monitor" },
+        { "bind": "MOD + Shift + Ctrl + L / Right", "action": "Move to Monitor Right", "desc": "Move column to right monitor" },
+        { "bind": "MOD + Shift + Ctrl + K / Up", "action": "Move to Monitor Up", "desc": "Move column to upper monitor" },
+        { "bind": "MOD + Shift + Ctrl + J / Down", "action": "Move to Monitor Down", "desc": "Move column to lower monitor" }
+      ]
+    },
+    {
+      "name": "Layout Controls",
+      "entries": [
+        { "bind": "MOD + C", "action": "Center Column", "desc": "Center the focused column" },
+        { "bind": "MOD + Ctrl + C", "action": "Center All", "desc": "Center all visible columns" },
+        { "bind": "MOD + [", "action": "Narrower", "desc": "Decrease column width by 10%" },
+        { "bind": "MOD + ]", "action": "Wider", "desc": "Increase column width by 10%" },
+        { "bind": "MOD + Shift + [", "action": "Shorter", "desc": "Decrease window height by 10%" },
+        { "bind": "MOD + Shift + ]", "action": "Taller", "desc": "Increase window height by 10%" },
+        { "bind": "MOD + Ctrl + Scroll Down", "action": "Shrink Height", "desc": "Decrease window height by 5%" },
+        { "bind": "MOD + Ctrl + Scroll Up", "action": "Grow Height", "desc": "Increase window height by 5%" }
+      ]
+    },
+    {
+      "name": "Window Modes",
+      "entries": [
+        { "bind": "MOD + T", "action": "Toggle Floating", "desc": "Float/unfloat the focused window" },
+        { "bind": "MOD + F", "action": "Fullscreen", "desc": "Toggle fullscreen" },
+        { "bind": "MOD + M", "action": "Maximize", "desc": "Maximize column width" }
+      ]
+    },
+    {
+      "name": "Utilities",
+      "entries": [
+        { "bind": "MOD + S", "action": "Screenshot", "desc": "Interactive screenshot (select area)" },
+        { "bind": "MOD + Shift + S", "action": "Screenshot Screen", "desc": "Capture entire screen" },
+        { "bind": "MOD + Ctrl + S", "action": "Screenshot Window", "desc": "Capture focused window" },
+        { "bind": "MOD + P", "action": "Color Picker", "desc": "Pick a color from screen" },
+        { "bind": "MOD + Alt + W", "action": "Restart Waybar", "desc": "Reload the status bar" },
+        { "bind": "MOD + /", "action": "Keybind Viewer", "desc": "Show this keybind reference" }
+      ]
+    }
+  ]
+}

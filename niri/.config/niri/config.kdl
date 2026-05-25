@@ -204,6 +204,9 @@ binds {
     MOD+CTRL+S                          { screenshot-window write-to-disk=true; }
     MOD+P                               { spawn-sh "pgrep -x hyprpicker >/dev/null || hyprpicker"; }
 
+    // Keybind Viewer
+    MOD+SLASH                           hotkey-overlay-title="Show Keybind Reference" { spawn-sh "keybinds-view"; }
+
     // Application Restarts
     MOD+ALT+W                           { spawn "sh" "-c" "pgrep -x waybar >/dev/null && killall waybar || waybar &"; }
     // use with toggle in waybar (doens't restart if not running)
