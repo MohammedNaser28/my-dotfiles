@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
-# Capture a key combination silently using libinput
-# No window opens — listens globally via evdev
+# Capture a key combination silently via evdev (no window)
 # Outputs: "MOD + A" or "MOD + Ctrl + Shift + A"
 
 set -euo pipefail
 
 notify-send -t 3000 "Key Capture" "Press your key combination..."
 
-# Map evdev modifier key names to display names
 modname() {
     case "$1" in
         KEY_LEFTMETA|KEY_RIGHTMETA)  echo "MOD" ;;
@@ -55,26 +53,24 @@ keyname() {
 declare -A held_mods
 captured=""
 
-stdbuf -oL libinput debug-events 2>/dev/null | grep --line-buffered "KEYBOARD_KEY" | while IFS= read -r line; do
-    # Parse: "event11  KEYBOARD_KEY                +0.123s	KEY_LEFTALT (56) pressed"
-    key=$(echo "$line" | sed 's/.*\t//; s/ ([0-9]*).*//')
-    state=$(echo "$line" | sed 's/.* //')
+# Process substitution avoids subshell — exit works
+while IFS= read -r line; do
+    # Parse: "event11  KEYBOARD_KEY  +0.123s  KEY_LEFTALT (56) pressed"
+    key="${line##*$'\t'}"
+    key="${key%% (*}"
+    state="${line##* }"
 
-    # Only process keyboard events
     mn=$(modname "$key" || true)
 
     if [ "$state" = "pressed" ]; then
         if [ -n "$mn" ]; then
             held_mods["$mn"]=1
-        else
+        elif [ -z "$captured" ]; then
             captured=$(keyname "$key")
         fi
     else
-        # released
-        if [ -n "$mn" ]; then
-            unset "held_mods[$mn]"
-        fi
-        # On release of the captured key, output and exit
+        [ -n "$mn" ] && unset "held_mods[$mn]"
+        # On release of captured key, output and exit
         if [ -z "$mn" ] && [ -n "$captured" ]; then
             result=""
             for m in MOD Ctrl Alt Shift; do
@@ -85,4 +81,4 @@ stdbuf -oL libinput debug-events 2>/dev/null | grep --line-buffered "KEYBOARD_KE
             exit 0
         fi
     fi
-done
+done < <(stdbuf -oL libinput debug-events 2>/dev/null | grep --line-buffered "KEYBOARD_KEY")
