@@ -1,12 +1,25 @@
 #!/usr/bin/env bash
 # Re-link all dotfiles on a new machine
-# Requires: GNU stow (sudo pacman -S stow)
+# Requires: GNU stow (sudo pacman -S stow), git-lfs (sudo pacman -S git-lfs)
 
 set -euo pipefail
 DOT="$(cd "$(dirname "$0")" && pwd)"
 
+echo "==> Checking git-lfs..."
+if ! command -v git-lfs &>/dev/null; then
+  echo "  WARNING: git-lfs not found. Wallpaper images will not be checked out."
+  echo "  Install: sudo pacman -S git-lfs"
+else
+  git lfs install --skip-repo 2>/dev/null || true
+fi
+
 echo "==> Initializing git submodules..."
 git -C "$DOT" submodule update --init --recursive 2>/dev/null && echo "  wallpapers" || echo "  (no submodules)"
+
+echo "==> Pulling LFS objects..."
+if command -v git-lfs &>/dev/null && [[ -d "$DOT/wallpapers/.git" ]]; then
+  git -C "$DOT/wallpapers" lfs pull 2>/dev/null && echo "  wallpapers LFS data" || echo "  (no LFS data)"
+fi
 
 echo "==> Stowing .config/ packages..."
 for pkg in alacritty fastfetch fish gtklock kitty mako niri nvim rofi systemd vicinae wallust waybar yazi zathura hypr btop opencode kbind-daemon; do

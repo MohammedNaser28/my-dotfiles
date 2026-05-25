@@ -7,7 +7,7 @@ IFS=$'\n\t'
 # CONFIGURATION
 # ==========================
 
-readonly REPO_URL="https://github.com/saatvik333/niri-dotfiles.git"
+readonly REPO_URL="https://github.com/MohammedNaser28/niri-dotfiles.git"
 readonly DOTDIR="${HOME}/.dotfiles-sevens"
 readonly CONFIG_DIR="${HOME}/.config"
 readonly BACKUP_DIR="${HOME}/.config_backup_$(date +%Y%m%d_%H%M%S)"
@@ -64,6 +64,7 @@ readonly PACMAN_PACKAGES=(
   zathura zathura-pdf-mupdf ttf-jetbrains-mono-nerd
   qt5-wayland qt6-wayland polkit-gnome ffmpeg imagemagick unzip jq
   gtklock rofi curl libnotify brightnessctl playerctl acpi
+  git-lfs
 )
 
 # ==========================
@@ -1145,6 +1146,17 @@ clone_or_update_dotfiles() {
   else
     warn "Failed to update submodules after retries. Continuing anyway..."
   fi
+
+  info "Pulling LFS objects for wallpapers..."
+  if command -v git-lfs &>/dev/null; then
+    if git -C "${DOTDIR}/wallpapers" lfs pull >> "${LOG_FILE}" 2>&1; then
+      msg "Wallpaper LFS objects pulled."
+    else
+      warn "Failed to pull wallpaper LFS objects."
+    fi
+  else
+    warn "git-lfs not found. Wallpaper images won't be checked out. Install git-lfs first."
+  fi
 }
 
 clone_dotfiles() {
@@ -1216,6 +1228,12 @@ create_symlinks() {
 install_wallpapers() {
   if [[ -d "${DOTDIR}/wallpapers" ]]; then
     info "Installing wallpapers..."
+
+    # Ensure LFS objects are pulled
+    if command -v git-lfs &>/dev/null; then
+      git -C "${DOTDIR}/wallpapers" lfs pull >> "${LOG_FILE}" 2>&1 || warn "Failed to pull LFS wallpaper data"
+    fi
+
     local wallpaper_dir="${HOME}/Pictures/Wallpapers"
     mkdir -p "${wallpaper_dir}"
 
