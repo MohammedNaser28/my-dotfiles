@@ -1,0 +1,79 @@
+window {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #1a1b26;
+}
+
+#window-box {
+    background-color: rgba(26, 27, 38, 0.88);
+    border: 1px solid rgba(122, 162, 247, 0.12);
+    border-radius: 16px;
+    padding: 36px 52px;
+}
+
+#clock-label {
+    font-size: 56px;
+    font-weight: 200;
+    color: #a9b1d6;
+    letter-spacing: 1px;
+}
+
+#date-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #565f89;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#input-label {
+    color: rgba(192, 202, 245, 0.35);
+    font-size: 12px;
+}
+
+#input-field {
+    background-color: #24283b;
+    color: #c0caf5;
+    border: 1px solid #3b4261;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    min-height: 22px;
+}
+
+#input-field:focus {
+    border-color: #7aa2f7;
+    box-shadow: 0 0 0 1px rgba(122, 162, 247, 0.3);
+}
+
+#unlock-button {
+    background-image: none;
+    background-color: #7aa2f7;
+    color: #1a1b26;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    min-height: 22px;
+}
+
+#unlock-button:hover {
+    background-color: #bb9af7;
+}
+
+#error-label {
+    color: #f7768e;
+    font-size: 12px;
+}
+
+#warning-label {
+    color: #e0af68;
+    font-size: 12px;
+}
+
+#message-box infobar {
+    background-color: rgba(36, 40, 59, 0.5);
+    border-radius: 6px;
+}
