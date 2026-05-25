@@ -125,14 +125,29 @@ select_output() {
 select_wallpaper() {
     local prompt="${1:-Select wallpaper}"
     local chosen
-    chosen=$(while read -r abs; do
-        # Show "folder/filename" for display; absolute path triggers quick look preview
-        echo "$abs"
-    done < "$CACHE_INDEX" \
-        | vicinae dmenu -n " Wallpaper " -s "{count} wallpapers" -p "$prompt" -W 800 --no-metadata)
 
-    # Return relative path from absolute
-    echo "${chosen#$WALL_DIR/}"
+    # Build rofi input with icon thumbnails for grid display
+    local rofi_input
+    rofi_input=$(mktemp)
+    while read -r abs; do
+        rel="${abs#$WALL_DIR/}"
+        cache_name="${rel//\//_}"
+        cache_name="${cache_name%.*}.jpg"
+        cache_file="$CACHE_DIR/$cache_name"
+
+        if [ -f "$cache_file" ]; then
+            printf '%s\000icon\037%s\n' "$rel" "$cache_file"
+        else
+            echo "$rel"
+        fi
+    done < "$CACHE_INDEX" > "$rofi_input"
+
+    chosen=$(rofi -dmenu -show-icons -p "$prompt" \
+        -config "$HOME/.config/rofi/bgselector/style.rasi" \
+        < "$rofi_input")
+    rm -f "$rofi_input"
+
+    echo "$chosen"
 }
 
 apply_wallpaper() {
