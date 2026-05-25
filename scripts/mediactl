@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Media control wrapper: volume, brightness, media playback
+set -euo pipefail
+
+case "${1:-help}" in
+    volume_up)   wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ ;;
+    volume_down) wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- ;;
+    volume_mute) wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle ;;
+    mic_mute)    wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle ;;
+
+    brightness_up)   brightnessctl set +10% ;;
+    brightness_down) brightnessctl set 10%- ;;
+
+    next_track)  playerctl next ;;
+    prev_track)  playerctl previous ;;
+    play_pause)  playerctl play-pause ;;
+    play_pausse) playerctl play-pause ;;
+    *)           echo "usage: mediactl {volume_up|volume_down|volume_mute|mic_mute|brightness_up|brightness_down|next_track|prev_track|play_pause}" ;;
+esac
