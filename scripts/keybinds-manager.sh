@@ -16,7 +16,7 @@ input() {
     local prompt="$1"
     rofi -dmenu -p "$prompt" -theme "$HOME/.config/rofi/colors/wallust.rasi" \
         -font "JetBrainsMono Nerd Font Propo 14" \
-        -theme-str "window {width: 600px;} inputbar {padding: 8px;} entry {placeholder: TYPE VALUE;}" 2>/dev/null
+        -theme-str "window {width: 600px;} inputbar {padding: 8px;} entry {placeholder: \"TYPE VALUE\";}" 2>/dev/null
 }
 
 notify() {
