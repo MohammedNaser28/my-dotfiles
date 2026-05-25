@@ -204,8 +204,9 @@ binds {
     MOD+CTRL+S                          { screenshot-window write-to-disk=true; }
     MOD+P                               { spawn-sh "pgrep -x hyprpicker >/dev/null || hyprpicker"; }
 
-    // Keybind Viewer
+    // Keybind Viewer & Manager
     MOD+SLASH                           hotkey-overlay-title="Show Keybind Reference" { spawn-sh "keybinds-view"; }
+    MOD+SHIFT+SLASH                     hotkey-overlay-title="Keybind Manager" { spawn-sh "keybinds-manager"; }
 
     // Application Restarts
     MOD+ALT+W                           { spawn "sh" "-c" "pgrep -x waybar >/dev/null && killall waybar || waybar &"; }

@@ -29,6 +29,21 @@ chosen=$(echo "$entries" | vicinae dmenu \
 # Exit silently if nothing selected
 [ -z "$chosen" ] && exit 0
 
-# Show description in notification
-desc=$(echo "$chosen" | awk -F' │ ' '{print $3}')
-notify-send -t 3000 "Keybind" "$desc"
+# Look up the exec command from keybinds.json
+selected_bind=$(echo "$chosen" | awk -F' │ ' '{print $1}')
+selected_action=$(echo "$chosen" | awk -F' │ ' '{print $2}')
+selected_desc=$(echo "$chosen" | awk -F' │ ' '{print $3}')
+
+exec_cmd=$(jq -r --arg bind "$selected_bind" --arg action "$selected_action" '
+    .categories[].entries[]
+    | select(.bind == $bind and .action == $action)
+    | .exec // empty
+' "$BINDS_FILE" | head -1)
+
+if [ -n "$exec_cmd" ]; then
+    # Execute in background, detached from rofi's stdin
+    ( eval "$exec_cmd" & ) &>/dev/null
+else
+    # No exec available, just show description
+    notify-send -t 3000 "Keybind" "$selected_desc"
+fi
