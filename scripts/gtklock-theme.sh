@@ -49,7 +49,7 @@ apply_theme() {
     if [ "$name" = "wallust" ]; then
         if [ ! -f "$WALLUST_CSS" ]; then
             notify-send -u critical "gtklock-theme" \
-                "wallust CSS not found. Run wallust first:\n  wallust run <image>"
+                "wallust CSS not found. Run:\n  wallust run ~/Pictures/Wallpapers/.../image.jpg"
             exit 1
         fi
         cp "$WALLUST_CSS" "$ACTIVE_CSS"
@@ -66,24 +66,8 @@ apply_theme() {
 }
 
 preview_theme() {
-    local src="$ACTIVE_CSS"
-    if [ ! -f "$src" ]; then
-        notify-send -u critical "gtklock-theme" "No active style.css to preview"
-        return
-    fi
-
-    local bg_path
-    bg_path=$(find "${WALL_DIR:-$HOME/Pictures/wall}" -maxdepth 1 -type f,l 2>/dev/null | head -1)
-
-    if [ -n "$bg_path" ]; then
-        gtklock -il -s "$src" -b "$bg_path" &
-        local pid=$!
-        sleep 3
-        kill "$pid" 2>/dev/null || true
-    else
-        notify-send -u normal "gtklock-theme" "No wallpaper for preview"
-    fi
-}
+    notify-send -u normal "gtklock-theme" \
+        "Preview not available in gtklock v4.0.0\nSwitch theme and lock to see it (Mod+Shift+Q)"
 
 open_url() {
     local url="$1"
@@ -118,7 +102,7 @@ list_choices() {
 
     choices+=("---")
     choices+=("Browse online  Open gtklock theme repos in browser")
-    choices+=("Preview  Preview current theme via gtklock -il")
+    choices+=("Preview  Not available in gtklock v4 (switch & lock to see)")
 
     local pick
     pick=$(vicinae dmenu -p "Select gtklock theme" \
