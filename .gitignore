@@ -70,8 +70,7 @@ GIMP/
 kde.org/
 ego/
 cachyos/
-gtk-3.0/
-gtk-4.0/
+# gtk-3.0/ and gtk-4.0/ are now tracked via the gtk stow package
 qt6ct/
 qt5ct/
 xfce4/
@@ -93,3 +92,9 @@ Notion/
 *.env
 *.swp.*
 temp.md
+
+# Package manager artifacts
+**/node_modules/
+
+# Backup files from dotfiles setup
+*.bak

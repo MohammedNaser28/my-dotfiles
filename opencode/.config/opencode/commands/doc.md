@@ -1,0 +1,1 @@
+Write idiomatic documentation comments for all exported functions, types, and constants in this file. For Go: godoc style (starts with the name). For Rust: `///` doc comments with a one-line summary, then details if needed. Don't add comments to unexported/private items unless the logic is genuinely non-obvious.

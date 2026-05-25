@@ -1,0 +1,1 @@
+Analyze the current file or the code I just shared. Find the bug or issue, explain the root cause in one sentence, then provide the fix. Show only the changed lines with enough context to know where they go.

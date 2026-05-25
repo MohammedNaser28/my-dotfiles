@@ -1,0 +1,24 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  "model": "openrouter/google/gemini-2.0-flash-001",
+  "small_model": "openrouter/google/gemini-2.0-flash-001",
+  "instructions": [
+    "AGENTS.md",
+    "knowledge/projects.md"
+  ],
+
+
+
+  "provider": {
+    "openrouter": {
+      "options": {
+        "apiKey": "YOUR_OPENROUTER_API_KEY",
+        "websearch_cited": {
+          "model": "google/gemini-2.0-flash-001"
+        }
+      }
+    }
+  },
+  "plugin": ["@tretrauit/opencode-crofai", "octto", "opencode-websearch-cited@1.1.1"]
+}

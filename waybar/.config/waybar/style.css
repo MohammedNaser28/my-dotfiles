@@ -9,10 +9,16 @@
 
 window#waybar {
   background: @background;
+  min-width: 48px;
 }
 
 #custom-cachy:hover,
 #cpu:hover,
+#memory:hover,
+#temperature:hover,
+#custom-gpu:hover,
+#disk:hover,
+#custom-keyboard-layout:hover,
 #network:hover,
 #bluetooth:hover,
 #pulseaudio:hover,
@@ -24,6 +30,11 @@ window#waybar {
 
 #custom-cachy,
 #cpu,
+#memory,
+#temperature,
+#custom-gpu,
+#disk,
+#custom-keyboard-layout,
 #clock,
 #mpris,
 #custom-menu,
@@ -83,6 +94,26 @@ window#waybar {
 }
 #pulseaudio.microphone.source-muted {
   color: @color1;
+}
+
+#memory {
+  color: @color6;
+}
+
+#temperature.critical {
+  color: @color1;
+}
+
+#disk {
+  color: @color14;
+}
+
+#custom-keyboard-layout {
+  color: @color13;
+}
+
+#custom-gpu {
+  color: @color5;
 }
 
 #battery.plugged {

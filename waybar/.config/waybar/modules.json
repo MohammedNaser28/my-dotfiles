@@ -50,26 +50,49 @@
     }
   },
   "cpu": {
-    "format": "{icon}",
+    "format": "{icon} {usage:2}%",
     "format-icons": [
-      "<span size='14pt'>⠁</span>",
-      "<span size='14pt'>⠉</span>",
-      "<span size='14pt'>⠙</span>",
-      "<span size='14pt'>⠛</span>",
-      "<span size='14pt'>⠟</span>",
-      "<span size='14pt'>⠿</span>"
+      "<span size='10pt'>⠁</span>",
+      "<span size='10pt'>⠉</span>",
+      "<span size='10pt'>⠙</span>",
+      "<span size='10pt'>⠛</span>",
+      "<span size='10pt'>⠟</span>",
+      "<span size='10pt'>⠿</span>"
     ],
     "interval": 1,
     "tooltip": true,
-    "tooltip-format": "CPU Frequency: {avg_frequency} GHz",
+    "tooltip-format": "CPU: {usage}% | Freq: {avg_frequency} GHz",
     "on-click": "alacritty -e btm"
+  },
+  "memory": {
+    "format": "󰍛 {percentage}%",
+    "interval": 5,
+    "tooltip": true,
+    "tooltip-format": "RAM: {used:2}/{total:2} GB ({percentage}%)",
+    "on-click": "alacritty -e btm"
+  },
+  "temperature": {
+    "hwmon-path": "/sys/class/hwmon/hwmon6/temp1_input",
+    "format": "󰔐 {temperatureC}°",
+    "interval": 5,
+    "tooltip": true,
+    "tooltip-format": "CPU Temp: {temperatureC}°C",
+    "critical-threshold": 85
+  },
+  "custom/gpu": {
+    "format": "󰢮 {}",
+    "interval": 10,
+    "exec": "$HOME/.config/scripts/gpu-stats.sh",
+    "tooltip": true,
+    "on-click": "nvidia-smi",
+    "return-type": "json"
   },
   "clock": {
     "interval": 1,
-    "format": "{:%H
+    "format": "{:%I
 %M}",
-    "format-alt": "{:%d
-%m
+    "format-alt": "{:%m
+%d
 %y}",
     "tooltip-format": "<tt><small>{calendar}</small></tt>"
 },
@@ -228,5 +251,22 @@
   "format": "<span size='13pt'>󰐥</span>",
   "on-click": "$HOME/.config/rofi/powermenu/powermenu.sh",
   "tooltip": false
+},
+"disk": {
+  "format": "󰋊 {percentage_used}%",
+  "interval": 60,
+  "path": "/",
+  "tooltip": true,
+  "tooltip-format": "Disk: {used}/{} GB ({percentage_used}%)",
+  "on-click": "alacritty -e df -h"
+},
+"custom/keyboard-layout": {
+  "format": "{}",
+  "interval": 1,
+  "exec": "$HOME/.config/scripts/kb-layout.sh",
+  "return-type": "json",
+  "tooltip": true,
+  "on-click": "niri msg action switch-layout",
+  "on-click-right": "niri msg action switch-layout"
 }
 }

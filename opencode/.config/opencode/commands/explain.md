@@ -1,0 +1,1 @@
+Explain what this code does. Structure: 1) one-line summary of purpose, 2) how it works (the interesting logic, not line-by-line), 3) any gotchas or non-obvious behavior. Skip explaining obvious things like variable declarations. Assume I'm a Go/Rust developer reading unfamiliar code.
