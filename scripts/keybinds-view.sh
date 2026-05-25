@@ -25,54 +25,12 @@ total=$(echo "$entries" | wc -l)
 chosen=$(echo "$entries" | rofi -dmenu -i -p " Keybinds " \
     -theme "$WALLUST_COLORS" \
     -font "$FONT" \
-    -theme-str "
-* { background: transparent; }
-window {
-    width: 900px;
-    transparency: \"real\";
-    background-color: transparent;
-    text-color: @foreground;
-}
-mainbox {
-    background-color: @background;
-    border: 0px;
-    padding: 0px;
-    children: [inputbar, listview];
-}
-inputbar {
-    spacing: 0px;
-    padding: 8px;
-    background-color: @background;
-    text-color: @foreground;
-    children: [prompt, entry];
-}
-prompt {
-    padding: 0 8px;
-    background-color: transparent;
-    text-color: @selected;
-}
-entry {
-    background-color: transparent;
-    text-color: @foreground;
-    placeholder-color: @background-alt;
-}
-listview {
-    padding: 0px;
-    spacing: 2px;
-    background-color: transparent;
-    layout: vertical;
-}
-element {
-    padding: 6px 12px;
-    background-color: transparent;
-    text-color: @foreground;
-    orientation: horizontal;
-}
-element selected {
-    background-color: @selected;
-    text-color: @background;
-}
-" \
+    -theme-str "window {width: 900px;}
+listview {lines: $total; columns: 1; dynamic: true; spacing: 4px; padding: 8px;}
+element {padding: 6px 12px; orientation: horizontal;}
+element-text {margin: 0px;}
+inputbar {padding: 8px; children: [prompt,entry];}
+prompt {padding: 0 8px;}" \
     -lines "$total")
 
 # Exit silently if nothing selected
