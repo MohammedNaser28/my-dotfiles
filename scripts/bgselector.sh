@@ -27,7 +27,6 @@ progress_file=$(mktemp)
 touch "$progress_file"
 
 max_jobs=$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
-job_count=0
 
 to_generate=$(mktemp)
 while read -r img; do
@@ -67,6 +66,7 @@ if command -v xargs >/dev/null 2>&1 && [ -s "$to_generate" ]; then
     cat "$to_generate" | xargs -P "$max_jobs" -I {} bash -c \
         'generate_thumbnail "$1" "$2" "$3" "$4"' _ {} "$CACHE_DIR" "$WALL_DIR" "$progress_file"
 elif [ -s "$to_generate" ]; then
+    job_count=0
     while read -r img; do
         generate_thumbnail "$img" "$CACHE_DIR" "$WALL_DIR" "$progress_file" &
         ((job_count++))
@@ -107,40 +107,30 @@ select_output() {
         return
     fi
 
-    local rofi_out
-    rofi_out=$(mktemp)
-    printf '󰄰 All outputs\n' > "$rofi_out"
-    for out in "${outputs[@]}"; do
-        printf '󰍹 %s\n' "$out" >> "$rofi_out"
-    done
-
     local chosen
-    chosen=$(rofi -dmenu -p "Set wallpaper for" -theme-str "window {width: 250px;} listview {lines: $(( ${#outputs[@]} + 1 ));}" \
-        -font "JetBrainsMono Nerd Font Propo 14" -lines $(( ${#outputs[@]} + 1 )) < "$rofi_out")
-    rm "$rofi_out"
+    chosen=$({
+        printf 'All outputs\n'
+        for out in "${outputs[@]}"; do
+            printf '%s\n' "$out"
+        done
+    } | vicinae dmenu -n " Wallpaper " -s "Select output" -W 300)
 
-    if [[ "$chosen" == "󰄰 All outputs" ]]; then
+    if [ "$chosen" = "All outputs" ]; then
         echo "all"
-    elif [[ "$chosen" =~ 󰍹\ (.+) ]]; then
-        echo "${BASH_REMATCH[1]}"
+    elif [ -n "$chosen" ]; then
+        echo "$chosen"
     fi
 }
 
 select_wallpaper() {
-    rofi_input=$(mktemp)
-    while read -r img; do
-        rel_path="${img#$WALL_DIR/}"
-        cache_name="${rel_path//\//_}"
-        cache_name="${cache_name%.*}.jpg"
-        cache_file="$CACHE_DIR/$cache_name"
-
-        [ -f "$cache_file" ] && printf '%s\000icon\037%s\n' "$rel_path" "$cache_file"
-    done < "$CACHE_INDEX" > "$rofi_input"
-
     local prompt="${1:-Select wallpaper}"
-    selected=$(rofi -dmenu -show-icons -p "$prompt" -config "$HOME/.config/rofi/bgselector/style.rasi" < "$rofi_input")
-    rm "$rofi_input"
-    echo "$selected"
+    local chosen
+    chosen=$(while read -r img; do
+        rel_path="${img#$WALL_DIR/}"
+        echo "$rel_path"
+    done < "$CACHE_INDEX" | vicinae dmenu -n " Wallpaper " -s "{count} wallpapers" -p "$prompt" -W 800)
+
+    echo "$chosen"
 }
 
 apply_wallpaper() {
@@ -192,9 +182,9 @@ else
 
     for out in "${all_outputs[@]}"; do
         if [ "$out" != "$target" ]; then
-            local msg="Set same wallpaper for $out?"
-            if echo -e "󰄬 Yes\n󰅖 No" | rofi -dmenu -p "$msg" -theme-str "window {width: 300px;} listview {lines: 2;}" \
-                -font "JetBrainsMono Nerd Font Propo 14" -lines 2 | grep -q "Yes"; then
+            local choice
+            choice=$(printf "Yes\nNo" | vicinae dmenu -n " Wallpaper " -s "Set same for $out?" -W 300)
+            if [ "$choice" = "Yes" ]; then
                 awww img "$SELECTED_PATH" -o "$out" -t fade --transition-duration 2 --transition-fps 30 &
                 sleep 0.2
             else

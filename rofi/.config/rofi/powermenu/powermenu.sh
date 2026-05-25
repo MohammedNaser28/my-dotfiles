@@ -1,31 +1,22 @@
 #!/bin/bash
 
-WALLUST_COLORS="${HOME}/.config/rofi/colors/wallust.rasi"
-
-entries="󰍃 Logout\n󰜉 Reboot\n󰐥 Shutdown\n󰤄 Suspend\n Lock"
-
-chosen=$(echo -e "$entries" | rofi -dmenu -theme-str "window {width: 200px;}
-listview {lines: 5; columns: 1;}
-element {padding: 12px; orientation: vertical;}"
--p "Power Menu" \
--theme "$WALLUST_COLORS" \
--font "JetBrainsMono Nerd Font Propo 14" \
--lines 5)
+chosen=$(printf "Logout\nReboot\nShutdown\nSuspend\nLock" \
+    | vicinae dmenu -n " Power Menu" -s "Choose action" -W 200)
 
 case "$chosen" in
-    *Logout)
+    Logout)
         niri msg action quit
         ;;
-    *Reboot)
+    Reboot)
         systemctl reboot
         ;;
-    *Shutdown)
+    Shutdown)
         systemctl poweroff
         ;;
-    *Suspend)
+    Suspend)
         systemctl suspend
         ;;
-    *Lock)
+    Lock)
         gtklock
         ;;
 esac
