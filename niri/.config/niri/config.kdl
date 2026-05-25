@@ -203,6 +203,7 @@ binds {
     MOD+SHIFT+S                         { screenshot-screen write-to-disk=true; }
     MOD+CTRL+S                          { screenshot-window write-to-disk=true; }
     MOD+P                               { spawn-sh "pgrep -x hyprpicker >/dev/null || hyprpicker"; }
+    MOD+U                               hotkey-overlay-title="Lock Screen Theme" { spawn-sh "gtklock-theme"; }
 
     // Keybind Viewer & Manager
     MOD+SLASH                           hotkey-overlay-title="Show Keybind Reference" { spawn-sh "keybinds-view"; }

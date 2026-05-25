@@ -1,0 +1,89 @@
+window {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+window:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#window-box {
+    background-color: transparent;
+}
+
+#time-box {
+    margin-bottom: 32px;
+}
+
+#clock-label {
+    font-size: 64px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+#date-label {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+#input-label {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+#input-field {
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 15px;
+    min-height: 22px;
+}
+
+#input-field:focus {
+    border-color: #7c7cff;
+    box-shadow: 0 0 0 1px rgba(124, 124, 255, 0.3);
+}
+
+#unlock-button {
+    background-image: none;
+    background-color: rgba(124, 124, 255, 0.4);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-size: 15px;
+    min-height: 22px;
+}
+
+#unlock-button:hover {
+    background-color: rgba(124, 124, 255, 0.6);
+}
+
+#error-label {
+    color: #e74c3c;
+    font-size: 13px;
+}
+
+#warning-label {
+    color: #f39c12;
+    font-size: 13px;
+}
+
+#message-box infobar {
+    background-color: transparent;
+}
+
+window.focused:not(.hidden) #time-box {
+    opacity: 1;
+}

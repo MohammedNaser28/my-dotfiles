@@ -67,3 +67,5 @@ mako = { src = 'mako', dst = '~/.config/mako/config' }
 zathurarc = { src = 'zathurarc', dst = '~/.config/zathura/zathurarc' }
 
 vicinae = { src = 'vicinae.toml', dst = '~/.local/share/vicinae/themes/wallust.toml'}
+
+gtklock = { src = 'gtklock', dst = '~/.config/gtklock/wallust.css' }

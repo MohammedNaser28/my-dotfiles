@@ -1,0 +1,79 @@
+window {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#window-box {
+    background-color: rgba(0, 0, 0, 0.35);
+    border-radius: 16px;
+    padding: 32px 48px;
+}
+
+#time-box {
+    margin-bottom: 24px;
+}
+
+#clock-label {
+    font-size: 48px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+#date-label {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+#input-label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+}
+
+#input-field {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    min-height: 20px;
+}
+
+#input-field:focus {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+#unlock-button {
+    background-image: none;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    min-height: 20px;
+}
+
+#unlock-button:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+#error-label {
+    color: #e74c3c;
+    font-size: 13px;
+}
+
+#warning-label {
+    color: #f39c12;
+    font-size: 13px;
+}
+
+#message-box infobar {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+}
+
+window.focused:not(.hidden) #time-box {
+    opacity: 1;
+}
