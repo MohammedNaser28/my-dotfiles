@@ -33,7 +33,7 @@ ebook = [
 [open]
 rules = [
     # Folder
-    { name = "*/", use = ["open", "edit", "reveal"] },
+    { mime = "inode/directory", use = ["open", "edit", "reveal"] },
     # Text
     { mime = "text/*", use = ["edit", "reveal"] },
     # Markdown
@@ -56,7 +56,7 @@ rules = [
     # Empty file
     { mime = "inode/empty", use = ["edit", "reveal"] },
     # Fallback
-    { name = "*", use = ["open", "reveal"] },
+    { mime = "*", use = ["open", "reveal"] },
 ]
 
 [mgr]
