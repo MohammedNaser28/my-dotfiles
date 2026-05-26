@@ -35,7 +35,15 @@ while IFS= read -r -d '' img; do
     fi
 
     if wallust run "$img" --quiet 2>/dev/null; then
-        cp "$HOME/.cache/wallust/colors.json" "$cache_json"
+        # Normalize wallpaper path in cache to use WALL_DIR (resolve symlinks)
+        python3 -c "
+import json, os
+with open('$HOME/.cache/wallust/colors.json') as f:
+    data = json.load(f)
+data['wallpaper'] = os.path.realpath('$img')
+with open('$cache_json', 'w') as f:
+    json.dump(data, f)
+" 2>/dev/null || cp "$HOME/.cache/wallust/colors.json" "$cache_json"
         ((processed++)) || true
     else
         ((failed++)) || true

@@ -21,7 +21,9 @@ for json in "$CACHE_DIR"/*.json; do
     name_hash=$(basename "$json" .json)
     swatch="$THUMB_DIR/$name_hash.png"
     wallpaper_path=$(jq -r '.wallpaper // "unknown"' "$json")
-    rel="${wallpaper_path#$WALL_DIR/}"
+
+    # Normalize: resolve symlinks so it works with both ~/.dotfiles-sevens/wallpapers/ and ~/Pictures/Wallpapers/
+    rel=$(realpath --relative-to="$WALL_DIR" "$wallpaper_path" 2>/dev/null || echo "$wallpaper_path")
 
     if [[ -f "$swatch" ]]; then
         printf '%s\000icon\037%s\n' "$rel" "$swatch"
@@ -37,8 +39,8 @@ rm -f "$rofi_input"
 
 [[ -z "$chosen" ]] && exit 0
 
-# Find matching cached palette
-selected_path="$WALL_DIR/$chosen"
+# Find matching cached palette — resolve symlinks
+selected_path=$(realpath "$WALL_DIR/$chosen" 2>/dev/null || echo "$WALL_DIR/$chosen")
 name_hash=$(echo -n "${chosen}" | sha256sum | cut -c1-16)
 cache_json="$CACHE_DIR/$name_hash.json"
 
