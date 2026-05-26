@@ -1,7 +1,7 @@
 // Startup Applications
 spawn-sh-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &"
 spawn-at-startup "awww-daemon"
-spawn-at-startup "sh" "-c" "sleep 1 && awww img ~/Pictures/Wallpapers/Nord/Dark/arctic-landscape.png -t fade --transition-duration 2 &"
+spawn-at-startup "sh" "-c" "sleep 1 && $HOME/.config/scripts/theme-sync.sh &"
 spawn-at-startup "waybar"
 spawn-at-startup "sh" "-c" "vicinae server &"
 
@@ -228,12 +228,12 @@ layout {
 
     focus-ring {
         width 0
-        active-color "#002B36"
+        active-color "#07070A"
     }
 
     insert-hint {
         off
-        color "#002B36"
+        color "#07070A"
     }
 
     struts {}

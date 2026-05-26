@@ -335,8 +335,8 @@ detect_theme_from_wallpaper() {
 check_theme_changed() {
   local -r current_theme="$1"
   local -r current_variation="$2"
+  local -r current_wallpaper="$3"
 
-  # Create cache directory if it doesn't exist
   mkdir -p "$(dirname "$THEME_STATE_FILE")"
 
   if [[ ! -f "$THEME_STATE_FILE" ]]; then
@@ -344,24 +344,27 @@ check_theme_changed() {
     return 0 # Theme changed (first run)
   fi
 
-  local previous_theme previous_variation
-  read -r previous_theme previous_variation < "$THEME_STATE_FILE"
+  local previous_theme previous_variation previous_wallpaper
+  read -r previous_theme previous_variation previous_wallpaper < "$THEME_STATE_FILE"
 
-  if [[ "$current_theme" == "$previous_theme" && "$current_variation" == "$previous_variation" ]]; then
-    log_info "Theme unchanged: $current_theme ($current_variation)"
-    return 1 # Theme did not change
-  else
-    log_info "Theme changed: $previous_theme ($previous_variation) → $current_theme ($current_variation)"
-    return 0 # Theme changed
+  if [[ "$current_wallpaper" == "$previous_wallpaper" ]]; then
+    log_info "Wallpaper unchanged"
+    if [[ "$current_theme" == "$previous_theme" && "$current_variation" == "$previous_variation" ]]; then
+      return 1 # Nothing changed
+    fi
   fi
+
+  log_info "Theme changed: $previous_theme ($previous_variation) → $current_theme ($current_variation)"
+  return 0 # Theme changed
 }
 
 save_theme_state() {
   local -r theme="$1"
   local -r variation="$2"
+  local -r wallpaper_path="$3"
 
   mkdir -p "$(dirname "$THEME_STATE_FILE")"
-  echo "$theme $variation" > "$THEME_STATE_FILE"
+  printf '%s %s %s\n' "$theme" "$variation" "$wallpaper_path" > "$THEME_STATE_FILE"
   log_info "Saved theme state: $theme ($variation)"
 }
 
@@ -573,34 +576,19 @@ set_icon_theme() {
 }
 
 run_wallust_theme() {
-  local -r wallust_theme="$1"
-  local -r wallpaper_path="$2"
+  local -r wallpaper_path="$1"
 
-  log_info "Running wallust with theme: $wallust_theme for wallpaper: $wallpaper_path"
+  log_info "Extracting colors from image: $wallpaper_path"
 
-  if [[ "$wallust_theme" == "random" ]]; then
-    # Just run wallust on the wallpaper without a specific theme if unknown
-    log_info "Running wallust in auto mode for: $wallpaper_path"
-    if ! wallust run "$wallpaper_path" --dynamic-threshold 2> /dev/null; then
-      log_warn "Wallust theme generation failed, continuing..."
-    else
-      log_success "Wallust theme generation completed"
-    fi
-  else
-    # Try to apply the specific theme if available
-    log_info "Applying specific wallust theme: $wallust_theme"
-    if ! wallust theme "$wallust_theme" 2> /dev/null; then
-      log_warn "Specific wallust theme failed, falling back to auto-generation for: $wallpaper_path"
-      # Fallback to running wallust on the wallpaper directly
-      if ! wallust run "$wallpaper_path" --dynamic-threshold 2> /dev/null; then
-        log_warn "Wallust generation failed completely, continuing..."
-      else
-        log_success "Wallust fallback theme generation completed"
-      fi
-    else
-      log_success "Wallust specific theme applied: $wallust_theme"
+  if ! wallust run "$wallpaper_path" --dynamic-threshold 2> /dev/null; then
+    log_warn "Wallust failed, trying with --backend fastresize..."
+    if ! wallust run "$wallpaper_path" --backend fastresize 2> /dev/null; then
+      log_warn "Wallust generation failed completely, continuing..."
+      return
     fi
   fi
+
+  log_success "Wallust colors extracted from image"
 }
 
 update_niri_config() {
@@ -682,27 +670,23 @@ main() {
 
   log_info "Detected theme: $detected_theme, variation: $wallpaper_variation"
 
-  # Check if theme/variation changed
+  # Always extract colors from the wallpaper image
+  run_wallust_theme "$wallpaper_path"
+
+  # Check if GTK theme/variation changed (skip if same)
   local theme_changed=0
-  if check_theme_changed "$detected_theme" "$wallpaper_variation"; then
+  if check_theme_changed "$detected_theme" "$wallpaper_variation" "$wallpaper_path"; then
     theme_changed=1
   fi
 
-  # Map to appropriate themes using both theme and variation
-  local gtk_theme
-  gtk_theme=$(map_to_gtk_theme "$detected_theme" "$wallpaper_variation")
-
-  local icon_theme
-  icon_theme=$(map_to_icon_theme "$detected_theme" "$wallpaper_variation")
-
-  local wallust_theme
-  wallust_theme=$(map_to_wallust_theme "$detected_theme" "$wallpaper_variation")
-
-  # Only apply themes if theme/variation changed
   if [[ $theme_changed -eq 1 ]]; then
+    local gtk_theme
+    gtk_theme=$(map_to_gtk_theme "$detected_theme" "$wallpaper_variation")
+    local icon_theme
+    icon_theme=$(map_to_icon_theme "$detected_theme" "$wallpaper_variation")
+
     set_gtk_theme "$gtk_theme" "$wallpaper_variation" "$icon_theme"
     set_icon_theme "$icon_theme"
-    run_wallust_theme "$wallust_theme" "$wallpaper_path"
     update_niri_config
     update_vscode_theme
 
@@ -718,13 +702,13 @@ main() {
       log_warn "makoctl not available, skipping notification daemon reload"
     fi
 
-    save_theme_state "$detected_theme" "$wallpaper_variation"
+    save_theme_state "$detected_theme" "$wallpaper_variation" "$wallpaper_path"
 
     log_success "Dynamic theme synchronization completed successfully"
     send_notification "Theme Manager" "Theme Synchronization Complete" "" "normal" "preferences-desktop-theme"
   else
-    log_info "Theme unchanged, skipping all theming operations"
-    log_success "Wallpaper applied, no theme changes needed"
+    log_info "GTK theme unchanged, skipping GTK theming operations"
+    log_success "Wallpaper colors updated, GTK theme retained"
   fi
 }
 
