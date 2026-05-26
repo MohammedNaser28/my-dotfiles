@@ -21,6 +21,8 @@
 | `MOD + Alt + E`      | Open TUI file manager (Yazi)                     |
 | `MOD + W`            | Open wallpaper selector                          |
 | `MOD + Shift + Q`    | Lock screen (GTKLock)                            |
+| `MOD + D`            | Display manager (niri-display-manager TUI)       |
+| `MOD + Shift + V`    | Clipboard history (cliphist)                     |
 
 ## Media Controls
 

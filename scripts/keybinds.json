@@ -73,6 +73,12 @@
           "action": "Display Manager",
           "desc": "Niri display/output configurator (TUI)",
           "exec": "niri-display-manager"
+        },
+        {
+          "bind": "MOD + Shift + V",
+          "action": "Clipboard History",
+          "desc": "Show cliphist history via vicinae",
+          "exec": "cliphist list | vicinae dmenu | cliphist decode | wl-copy"
         }
       ]
     },
