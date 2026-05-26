@@ -1482,6 +1482,36 @@ main() {
   fi
   add_summary "Evdev tools built"
 
+  step "Building niri-display-manager (Rust TUI)"
+  NDM_DIR="${HOME}/.cache/niri-display-manager"
+  NDM_REPO="https://github.com/MohammedNaser28/niri-display-manager.git"
+  if command -v cargo &>/dev/null; then
+    if [[ -d "${NDM_DIR}/.git" ]]; then
+      git -C "${NDM_DIR}" pull --rebase --autostash >> "${LOG_FILE}" 2>&1 || true
+    else
+      git clone --depth=1 "${NDM_REPO}" "${NDM_DIR}" >> "${LOG_FILE}" 2>&1
+    fi
+    (cd "${NDM_DIR}" && cargo build --release >> "${LOG_FILE}" 2>&1) && \
+      ln -sf "${NDM_DIR}/target/release/niri-display-manager" "${HOME}/.local/bin/niri-display-manager" && \
+      msg "  niri-display-manager" || warn "  niri-display-manager build failed"
+  else
+    warn "cargo not found, installing rustup..."
+    if sudo pacman -S --needed --noconfirm rustup >> "${LOG_FILE}" 2>&1; then
+      rustup default stable >> "${LOG_FILE}" 2>&1 || true
+      if [[ -d "${NDM_DIR}/.git" ]]; then
+        git -C "${NDM_DIR}" pull --rebase --autostash >> "${LOG_FILE}" 2>&1 || true
+      else
+        git clone --depth=1 "${NDM_REPO}" "${NDM_DIR}" >> "${LOG_FILE}" 2>&1
+      fi
+      (cd "${NDM_DIR}" && cargo build --release >> "${LOG_FILE}" 2>&1) && \
+        ln -sf "${NDM_DIR}/target/release/niri-display-manager" "${HOME}/.local/bin/niri-display-manager" && \
+        msg "  niri-display-manager" || warn "  niri-display-manager build failed"
+    else
+      warn "Failed to install rustup. Skipping niri-display-manager build."
+    fi
+  fi
+  add_summary "niri-display-manager built"
+
   step "Installing Wallpapers"
   install_wallpapers
   add_summary "Wallpapers installed to ~/Pictures/Wallpapers"

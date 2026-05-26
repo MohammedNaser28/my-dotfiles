@@ -1,38 +1,24 @@
 # Dotfiles
 
-Fork of [saatvik333/niri-dotfiles](https://github.com/saatvik333/niri-dotfiles) restructured for **GNU stow** symlink management.
+Niri WM dotfiles for Arch Linux. Fork of [saatvik333/niri-dotfiles](https://github.com/saatvik333/niri-dotfiles).
 
-**Upstream** is preserved at `git@github.com:saatvik333/niri-dotfiles.git` for pulling updates.
-
----
-
-## Contents
-
-- [Tracked Packages](#tracked-packages)
-- [Themes](#themes)
-- [Keybinds](#keybinds)
-  - [System & Shortcuts](#system--shortcuts)
-  - [Applications](#applications)
-  - [Media Controls](#media-controls)
-  - [Window Management](#window-management)
-  - [Workspace Management](#workspace-management)
-  - [Monitor Management](#monitor-management)
-  - [Layout Controls](#layout-controls)
-  - [Window Modes](#window-modes)
-  - [Utilities](#utilities)
-
-## Usage
-
-### Deploy on a new machine
-
-Requires [GNU stow](https://www.gnu.org/software/stow/):
+## Quick Install (Arch Linux)
 
 ```bash
-sudo pacman -S stow
-git clone <your-fork-url> ~/.dotfiles
-cd ~/.dotfiles
+bash <(curl -fsSL https://raw.githubusercontent.com/MohammedNaser28/my-dotfiles/main/install.sh)
+```
+
+Runs the full install script: installs packages, themes, builds tools, symlinks configs, and sets up wallpapers.
+
+## Manual Setup
+
+```bash
+git clone https://github.com/MohammedNaser28/my-dotfiles ~/.dotfiles-sevens
+cd ~/.dotfiles-sevens
 ./stow.sh
 ```
+
+Requires: `stow`, `git-lfs`, `gcc` (for evdev tools), `cargo` (for niri-display-manager).
 
 # Tracked Packages
 

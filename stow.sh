@@ -51,6 +51,22 @@ ln -sf "$DOT/scripts/mediactl" "$HOME/.local/bin/mediactl"
 echo "==> Building evdev tools..."
 gcc -O2 -o "$HOME/.local/bin/keycap" "$DOT/scripts/keycap.c" 2>/dev/null && echo "  keycap" || echo "  keycap (build failed)"
 gcc -O2 -o "$HOME/.local/bin/kbind-daemon" "$DOT/scripts/kbind-daemon.c" 2>/dev/null && echo "  kbind-daemon" || echo "  kbind-daemon (build failed)"
+
+echo "==> Building niri-display-manager (Rust TUI)..."
+if command -v cargo &>/dev/null; then
+  NDM_DIR="$HOME/.cache/niri-display-manager"
+  NDM_REPO="https://github.com/MohammedNaser28/niri-display-manager.git"
+  if [[ -d "$NDM_DIR/.git" ]]; then
+    git -C "$NDM_DIR" pull --rebase --autostash 2>/dev/null || true
+  else
+    git clone --depth=1 "$NDM_REPO" "$NDM_DIR" 2>/dev/null
+  fi
+  (cd "$NDM_DIR" && cargo build --release 2>/dev/null) && \
+    ln -sf "$NDM_DIR/target/release/niri-display-manager" "$HOME/.local/bin/niri-display-manager" && \
+    echo "  niri-display-manager" || echo "  niri-display-manager (build failed)"
+else
+  echo "  cargo not found, skipping niri-display-manager build"
+fi
   echo "  scripts"
 
 echo "==> Done! All dotfiles linked."

@@ -67,6 +67,12 @@
           "action": "Lock Screen",
           "desc": "Lock with GTKLock",
           "exec": "gtklock"
+        },
+        {
+          "bind": "MOD + D",
+          "action": "Display Manager",
+          "desc": "Niri display/output configurator (TUI)",
+          "exec": "niri-display-manager"
         }
       ]
     },

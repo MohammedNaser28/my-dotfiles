@@ -67,6 +67,7 @@ binds {
 
     // Application Shortcuts
     MOD+RETURN                          hotkey-overlay-title="Open Terminal: alacritty" { spawn-sh "alacritty"; }
+    MOD+D                               hotkey-overlay-title="Display Manager" { spawn-sh "niri-display-manager"; }
     MOD+ALT+RETURN                      hotkey-overlay-title="Open Terminal: kitty" { spawn-sh "kitty"; }
     MOD+ALT+B                         hotkey-overlay-title="Open Secondary Browser: chrome" { spawn-sh "google-chrome-stable --enable-features=TouchpadOverscrollHistoryNavigation"; }
     MOD+SHIFT+Q                         hotkey-overlay-title="Lock Screen" { spawn-sh "$HOME/.config/scripts/lockscreen.sh"; }
@@ -230,12 +231,12 @@ layout {
 
     focus-ring {
         width 0
-        active-color "#0C0D0F"
+        active-color "#0E0E13"
     }
 
     insert-hint {
         off
-        color "#0C0D0F"
+        color "#0E0E13"
     }
 
     struts {}
