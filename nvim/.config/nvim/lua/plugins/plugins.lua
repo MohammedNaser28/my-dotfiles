@@ -1,4 +1,7 @@
 return {{
+    "lewis6991/async.nvim",
+    lazy = true,
+}, {
     "LazyVim/LazyVim",
     opts = {
         news = {
@@ -19,10 +22,10 @@ return {{
     "mason-org/mason.nvim",
     opts = function(_, opts)
         vim.list_extend(opts.ensure_installed, { -- Core LSP Servers
-        "lua-language-server", "pyright", "ruff-lsp", "typescript-language-server", "eslint-lsp", "html-lsp", "css-lsp",
+        "lua-language-server", "pyright", "typescript-language-server", "eslint-lsp", "html-lsp", "css-lsp",
         "tailwindcss-language-server", "json-lsp", "yaml-language-server", "taplo", "marksman", "rust-analyzer",
         "gopls", "dockerfile-language-server", "terraform-ls", "prisma-language-server", "clangd", -- Formatters
-        "stylua", "prettierd", "eslint_d", "shfmt", "rustfmt", "gofumpt", "goimports", "taplo", "black", "isort",
+        "stylua", "prettierd", "eslint_d", "shfmt", "gofumpt", "goimports", "taplo", "black", "isort",
         "clang-format", -- Linters
         "shellcheck", "ruff", "eslint_d", "yamllint", "markdownlint", "hadolint"})
     end

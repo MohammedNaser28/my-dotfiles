@@ -5,6 +5,7 @@ spawn-at-startup "sh" "-c" "sleep 1 && $HOME/.config/scripts/theme-sync.sh &"
 spawn-at-startup "waybar"
 spawn-at-startup "sh" "-c" "vicinae server &"
 spawn-at-startup "sh" "-c" "cliphist store &"
+spawn-at-startup "sh" "-c" "sleep 2 && cursor-speeder"
 
 // General Settings
 prefer-no-csd
@@ -233,12 +234,12 @@ layout {
 
     focus-ring {
         width 0
-        active-color "#0E0E13"
+        active-color "#07070B"
     }
 
     insert-hint {
         off
-        color "#0E0E13"
+        color "#07070B"
     }
 
     struts {}
@@ -425,3 +426,6 @@ environment {
     VDPAU_DRIVER "va_gl"
     LIBVA_DRIVER_NAME "iHD"
 }
+
+// Cursor size override: managed by cursor-speeder daemon
+include optional=true "cursor-override.kdl"
