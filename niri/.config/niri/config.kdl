@@ -75,6 +75,7 @@ binds {
     MOD+E                               hotkey-overlay-title="File Manager: Thunar" { spawn-sh "thunar"; }
     MOD+ALT+E                           hotkey-overlay-title="File Manager: Yazi" { spawn-sh "yazi"; }
     MOD+W                               hotkey-overlay-title="Open Wallpaper Selector" { spawn-sh "$HOME/.config/scripts/bgselector.sh"; }
+    MOD+ALT+W                           hotkey-overlay-title="Browse Color Palettes" { spawn-sh "$HOME/.config/scripts/palette-view.sh"; }
 
     // Media Keys
     XF86AudioRaiseVolume                allow-when-locked=true { spawn-sh "mediactl volume_up"; }
@@ -228,12 +229,12 @@ layout {
 
     focus-ring {
         width 0
-        active-color "#07070A"
+        active-color "#0C0D0F"
     }
 
     insert-hint {
         off
-        color "#07070A"
+        color "#0C0D0F"
     }
 
     struts {}

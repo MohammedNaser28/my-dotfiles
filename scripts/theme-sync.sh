@@ -577,15 +577,52 @@ set_icon_theme() {
 
 run_wallust_theme() {
   local -r wallpaper_path="$1"
+  local -r wallpaper_rel="${wallpaper_path#$HOME/Pictures/Wallpapers/}"
+  local -r cache_dir="$HOME/.cache/wallpaper-palettes"
+  local -r thumb_dir="$HOME/.cache/thumbnails/palettes"
+  local -r name_hash=$(echo -n "$wallpaper_rel" | sha256sum | cut -c1-16)
 
-  log_info "Extracting colors from image: $wallpaper_path"
+  mkdir -p "$cache_dir" "$thumb_dir"
 
+  # Check for cached palette
+  if [[ -f "$cache_dir/$name_hash.json" ]]; then
+    log_info "Using cached palette for: $wallpaper_rel"
+    cp "$cache_dir/$name_hash.json" "$HOME/.cache/wallust/colors.json"
+  else
+    log_info "No cached palette found, extracting from image: $wallpaper_rel"
+  fi
+
+  # Run wallust to generate templates (uses cached colors.json if available)
   if ! wallust run "$wallpaper_path" --dynamic-threshold 2> /dev/null; then
     log_warn "Wallust failed, trying with --backend fastresize..."
     if ! wallust run "$wallpaper_path" --backend fastresize 2> /dev/null; then
       log_warn "Wallust generation failed completely, continuing..."
       return
     fi
+  fi
+
+  # Save palette to cache + generate swatch thumbnail
+  if [[ ! -f "$cache_dir/$name_hash.json" ]]; then
+    cp "$HOME/.cache/wallust/colors.json" "$cache_dir/$name_hash.json"
+    # Generate 16-color swatch PNG via Python
+    python3 -c "
+import json, os
+from PIL import Image
+with open('$cache_dir/$name_hash.json') as f:
+    data = json.load(f)
+colors = [data['colors'][f'color{i}'] for i in range(16)]
+rgb = []
+for c in colors:
+    c = c.lstrip('#')
+    rgb.append(tuple(int(c[i:i+2], 16) for i in (0, 2, 4)))
+img = Image.new('RGB', (320, 20))
+for i, col in enumerate(rgb):
+    for x in range(i * 20, (i + 1) * 20):
+        for y in range(20):
+            img.putpixel((x, y), col)
+os.makedirs('$thumb_dir', exist_ok=True)
+img.resize((160, 10), Image.NEAREST).save('$thumb_dir/$name_hash.png')
+" 2>/dev/null || true
   fi
 
   log_success "Wallust colors extracted from image"
