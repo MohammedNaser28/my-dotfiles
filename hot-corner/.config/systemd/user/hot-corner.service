@@ -1,0 +1,15 @@
+[Unit]
+Description=Hot corner to toggle niri overview (GNOME Activities-style)
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=%h/.local/bin/hot-corner -f
+Restart=on-failure
+RestartSec=2
+Type=simple
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+Environment=DISPLAY=
+
+[Install]
+WantedBy=default.target

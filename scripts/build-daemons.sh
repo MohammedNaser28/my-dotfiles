@@ -49,17 +49,25 @@ for src in "$SRC_DIR"/*.c; do
     bin="$BIN_DIR/$name"
 
     if [ "$src" -nt "$bin" ] || [ ! -f "$bin" ]; then
-        if $CC $CFLAGS -o "$bin" "$src" 2>/tmp/_cs_err.log; then
+        extra=""
+        if [ "$name" = "hot-corner" ]; then
+            extra=$(pkg-config --cflags --libs gtk+-3.0 gtk-layer-shell-0 2>/dev/null) || {
+                warn "Missing gtk-layer-shell (skip $name)"
+                ((skipped++))
+                continue
+            }
+        fi
+        if $CC $CFLAGS $extra -o "$bin" "$src" 2>/tmp/_cs_err.log; then
             ok "$name → $bin"
-            ((compiled++))
+            ((++compiled))
         else
             warn "Failed to compile $name:"
             cat /tmp/_cs_err.log >&2
-            ((failed++))
+            ((++failed))
         fi
     else
         ok "$name up-to-date"
-        ((skipped++))
+        ((++skipped))
     fi
 done
 rm -f /tmp/_cs_err.log

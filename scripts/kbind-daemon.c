@@ -1,4 +1,5 @@
 // kbind-daemon: background evdev key re-binder for keys that niri can't match
+// Also handles mod-alone → toggle-overview (GNOME Activities equivalent)
 // Compile: gcc -O2 -o ~/.local/bin/kbind-daemon kbind-daemon.c
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,6 +11,13 @@
 #include <linux/input-event-codes.h>
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
+
+static int is_modifier(int code) {
+    return code == KEY_LEFTMETA  || code == KEY_RIGHTMETA  ||
+           code == KEY_LEFTCTRL  || code == KEY_RIGHTCTRL  ||
+           code == KEY_LEFTALT   || code == KEY_RIGHTALT   ||
+           code == KEY_LEFTSHIFT || code == KEY_RIGHTSHIFT;
+}
 
 struct binding {
     int code;           // evdev keycode
@@ -72,6 +80,7 @@ int main(int argc, char **argv) {
 
     struct input_event ev;
     int last_press[KEY_CNT] = {0};
+    int mod_held = 0, mod_chorded = 0;
 
     while (1) {
         fd_set set; FD_ZERO(&set);
@@ -89,11 +98,36 @@ int main(int argc, char **argv) {
             if (ev.type != EV_KEY) continue;
             if (ev.code >= KEY_CNT) continue;
 
+            int is_mod = is_modifier(ev.code);
+            int is_meta = ev.code == KEY_LEFTMETA || ev.code == KEY_RIGHTMETA;
+
             if (ev.value == 1) { // pressed
                 last_press[ev.code] = 1;
+
+                // Track mod-alone for toggle-overview
+                if (is_meta) {
+                    mod_held = 1;
+                    mod_chorded = 0;
+                } else if (mod_held && !is_mod) {
+                    mod_chorded = 1;
+                }
             } else if (ev.value == 0) { // released
                 if (last_press[ev.code]) {
                     last_press[ev.code] = 0;
+
+                    // Mod-alone release → toggle overview
+                    if (is_meta) {
+                        if (mod_held && !mod_chorded) {
+                            if (fork() == 0) {
+                                close(0); close(1); close(2);
+                                execlp("niri", "niri", "msg", "action", "toggle-overview", NULL);
+                                _exit(1);
+                            }
+                        }
+                        mod_held = 0;
+                        mod_chorded = 0;
+                    }
+
                     // Check if this key is bound
                     for (size_t b = 0; b < ARRAY_SIZE(bindings); b++) {
                         if (bindings[b].code == ev.code) {
