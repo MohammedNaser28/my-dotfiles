@@ -39,25 +39,27 @@ show_current_colors() {
     fi
 
     local input
-    input=$(python3 -c "
-import json
-with open('$WALLUST_CACHE') as f:
-    c = json.load(f)
-colors = c.get('colors', {})
-special = c.get('special', {})
-lines = ['Current Palette',
-    f'Background: {special.get(\"background\", \"?\")}',
-    f'Foreground: {special.get(\"foreground\", \"?\")}',
-    f'Cursor:     {special.get(\"cursor\", \"?\")}',
-]
-for i in range(16):
-    name = f'color{i}'
-    if name in colors:
-        lines.append(f'{name}: {colors[name]}')
-lines.append('')
-lines.append('back')
-printf '%s\n' '${lines[@]}'
-" 2>/dev/null)
+    input=$(python3 <<- 'PYEOF' 2>/dev/null
+		import json
+		with open("'"$WALLUST_CACHE"'") as f:
+		    c = json.load(f)
+		colors = c.get("colors", {})
+		special = c.get("special", {})
+		lines = ["Current Palette",
+		    "Background: " + special.get("background", "?"),
+		    "Foreground: " + special.get("foreground", "?"),
+		    "Cursor:     " + special.get("cursor", "?"),
+		]
+		for i in range(16):
+		    name = f"color{i}"
+		    if name in colors:
+		        lines.append(f"{name}: {colors[name]}")
+		lines.append("")
+		lines.append("back")
+		print("\n".join(lines))
+	PYEOF
+	)
+
     local choice
     choice=$(vicinae dmenu -n " Palette " -s "Current palette" -W 400 -H 500 <<< "$input")
     [[ "$choice" == "back" ]] && return 0
@@ -65,7 +67,7 @@ printf '%s\n' '${lines[@]}'
 
 generate_from_image() {
     local img_path
-    img_path=$(vicinae dmenu -n " Palette " -s "Enter image path" -W 500 -p "/path/to/image.jpg" <<< "" 2>/dev/null || true)
+    img_path=$(rofi -dmenu -p "Image path" -config /dev/null <<< "" 2>/dev/null || true)
     [[ -z "$img_path" ]] && return
     img_path=$(eval echo "$img_path")
 
@@ -104,7 +106,7 @@ save_current_palette() {
     fi
 
     local name
-    name=$(vicinae dmenu -n " Palette " -s "Name this palette" -W 400 -p "my-palette" <<< "" 2>/dev/null || true)
+    name=$(rofi -dmenu -p "Palette name" -config /dev/null <<< "" 2>/dev/null || true)
     [[ -z "$name" ]] && return
 
     local categories=()
