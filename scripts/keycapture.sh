@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# Capture a key combination silently via evdev (no window, no panel)
+# Capture a key combination via evdev, with a styled rofi overlay
 # Uses the compiled keycap binary for reliable capture
 
 BIN="${HOME}/.local/bin/keycap"
 SRC="$(dirname "$0")/keycap.c"
+ROFI_THEME="${HOME}/.config/rofi/colors/wallust.rasi"
 
 # Build if missing
 if [ ! -x "$BIN" ]; then
@@ -18,5 +19,29 @@ if [ ! -x "$BIN" ]; then
     fi
 fi
 
-notify-send -t 2000 "Key Capture" "Press your key combination..."
-"$BIN"
+KEYCAP_OUT=$(mktemp /tmp/keycap-XXXXXX)
+
+# Run keycap in background, save combo to temp file
+"$BIN" > "$KEYCAP_OUT" 2>/dev/null &
+KEYCAP_PID=$!
+
+# Show styled rofi overlay until key is captured
+rofi -e "Press your key combination..." \
+    -theme "$ROFI_THEME" \
+    -font "JetBrainsMono Nerd Font Propo 14" \
+    -theme-str "window {width: 480px;}" &
+ROFI_PID=$!
+
+# Wait for keycap to capture
+wait "$KEYCAP_PID" 2>/dev/null
+
+# Dismiss rofi
+kill "$ROFI_PID" 2>/dev/null
+wait "$ROFI_PID" 2>/dev/null
+
+COMBIN=$(tr -d '\n' < "$KEYCAP_OUT")
+rm -f "$KEYCAP_OUT"
+
+[ -z "$COMBIN" ] && exit 1
+
+echo "$COMBIN"
