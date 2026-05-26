@@ -126,7 +126,6 @@ select_wallpaper() {
     local prompt="${1:-Select wallpaper}"
     local chosen
 
-    # Build rofi input with icon thumbnails for grid display
     local rofi_input
     rofi_input=$(mktemp)
     while read -r abs; do
@@ -169,49 +168,31 @@ apply_wallpaper() {
 
 # --- Main flow ---
 
+selected=$(select_wallpaper "Select wallpaper")
+[ -z "$selected" ] && exit 0
+
+SELECTED_PATH="$WALL_DIR/$selected"
+[ ! -f "$SELECTED_PATH" ] && exit 1
+
 target=$(select_output)
 [ -z "$target" ] && exit 0
 
-SELECTED_PATH=""
-
 if [ "$target" == "all" ]; then
-    selected=$(select_wallpaper "Select wallpaper")
-    [ -z "$selected" ] && exit 0
-    SELECTED_PATH="$WALL_DIR/$selected"
     apply_wallpaper "$selected" "all"
-    sleep 0.2
 else
-    selected=$(select_wallpaper "Wallpaper for $target")
-    [ -z "$selected" ] && exit 0
-    SELECTED_PATH="$WALL_DIR/$selected"
     apply_wallpaper "$selected" "$target"
-    sleep 0.2
 
-    # Offer to set wallpaper for remaining outputs
-    local all_outputs=()
     while IFS= read -r line; do
         if [[ "$line" =~ ^Output ]]; then
             local name
             name=$(echo "$line" | grep -oP '\(\K[^)]+')
-            [ -n "$name" ] && all_outputs+=("$name")
+            [ -n "$name" ] || continue
+            [ "$name" = "$target" ] && continue
+            choice=$(printf "Yes\nNo" | vicinae dmenu -n " Wallpaper " -s "Set same for $name?" -W 300)
+            [ "$choice" = "Yes" ] && awww img "$SELECTED_PATH" -o "$name" -t fade --transition-duration 2 --transition-fps 30 &
+            sleep 0.2
         fi
     done < <(niri msg outputs 2>/dev/null)
-
-    for out in "${all_outputs[@]}"; do
-        if [ "$out" != "$target" ]; then
-            local choice
-            choice=$(printf "Yes\nNo" | vicinae dmenu -n " Wallpaper " -s "Set same for $out?" -W 300)
-            if [ "$choice" = "Yes" ]; then
-                awww img "$SELECTED_PATH" -o "$out" -t fade --transition-duration 2 --transition-fps 30 &
-                sleep 0.2
-            else
-                local other_sel
-                other_sel=$(select_wallpaper "Wallpaper for $out")
-                [ -n "$other_sel" ] && awww img "$WALL_DIR/$other_sel" -o "$out" -t fade --transition-duration 2 --transition-fps 30 &
-                sleep 0.2
-            fi
-        fi
-    done
 fi
 
 sleep 0.2
