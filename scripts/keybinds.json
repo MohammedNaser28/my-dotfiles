@@ -78,7 +78,7 @@
           "bind": "MOD + Shift + V",
           "action": "Clipboard History",
           "desc": "Show cliphist history via vicinae",
-          "exec": "cliphist list | vicinae dmenu | cut -f1 | cliphist decode | wl-copy"
+          "exec": "$HOME/.config/scripts/clipboard.sh"
         }
       ]
     },

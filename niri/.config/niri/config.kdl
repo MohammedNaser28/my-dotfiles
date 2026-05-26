@@ -208,7 +208,7 @@ binds {
     MOD+CTRL+S                          { screenshot-window write-to-disk=true; }
     MOD+P                               { spawn-sh "pgrep -x hyprpicker >/dev/null || hyprpicker"; }
     MOD+U                               hotkey-overlay-title="Lock Screen Theme" { spawn-sh "$HOME/.config/scripts/gtklock-theme.sh"; }
-    MOD+SHIFT+V                         hotkey-overlay-title="Clipboard History" { spawn-sh "cliphist list | vicinae dmenu | cut -f1 | cliphist decode | wl-copy"; }
+    MOD+SHIFT+V                         hotkey-overlay-title="Clipboard History" { spawn-sh "$HOME/.config/scripts/clipboard.sh"; }
 
     // Keybind Viewer & Manager
     MOD+SLASH                           hotkey-overlay-title="Show Keybind Reference" { spawn-sh "$HOME/.config/scripts/keybinds-view.sh"; }
