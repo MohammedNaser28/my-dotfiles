@@ -2,15 +2,10 @@
 # Keybind manager — vicinae dmenu based
 # Add, edit, remove, and check conflicts in keybinds.json
 
-set -euo pipefail
+set -uo pipefail
 
 BINDS_FILE="${HOME}/.config/scripts/keybinds.json"
 FONT="JetBrainsMono Nerd Font Propo 14"
-
-pick() {
-    local prompt="$1"; shift
-    echo "$@" | vicinae dmenu -n "$prompt" -p "Search..." -W 800
-}
 
 input() {
     local prompt="$1"
@@ -20,7 +15,7 @@ input() {
 }
 
 notify() {
-    notify-send -t 2500 "Keybinds" "$1"
+    notify-send -t 3000 "Keybinds" "$1" 2>/dev/null || true
 }
 
 # ── Conflict check ──────────────────────────────────────
@@ -45,39 +40,48 @@ check_conflicts() {
 
 # ── View keybinds ───────────────────────────────────────
 view_keybinds() {
-    jq -r '.categories[]
+    local output
+    output=$(jq -r '.categories[]
         | .name as $cat
         | .entries[]
         | "\(.bind) │ \(.action) │ \(.desc)"
-    ' "$BINDS_FILE" | vicinae dmenu -n " Keybinds " -p "Search..." -W 900
+    ' "$BINDS_FILE" 2>/dev/null) || { notify "Failed to read keybinds"; return; }
+    [ -z "$output" ] && { notify "No keybinds found"; return; }
+    echo "$output" | vicinae dmenu -n " Keybinds " -p "Search..." -W 900
 }
 
 # ── Add keybind ─────────────────────────────────────────
 add_keybind() {
     local bind action desc exec_cmd
 
+    notify "Press your key combination..."
     bind=$(keycapture 2>/dev/null)
-    [ -z "$bind" ] && return
+    if [ -z "$bind" ]; then
+        notify "Key capture cancelled or failed"
+        return
+    fi
 
     action=$(input "Add: enter action name")
-    [ -z "$action" ] && return
+    [ -z "$action" ] && { notify "Cancelled (no action)"; return; }
 
     desc=$(input "Add: enter description")
-    [ -z "$desc" ] && return
+    [ -z "$desc" ] && { notify "Cancelled (no description)"; return; }
 
     exec_cmd=$(input "Add: enter exec command (or leave empty)")
-    [ -z "$exec_cmd" ] && exec_cmd=null
 
     local tmp
     tmp=$(mktemp)
-    jq --arg bind "$bind" --arg action "$action" --arg desc "$desc" \
-       --argjson exec_cmd "$(echo "$exec_cmd" | jq -R '.')" \
+    if ! jq --arg bind "$bind" --arg action "$action" --arg desc "$desc" \
+       --argjson exec_cmd "$([ -n "$exec_cmd" ] && echo "$exec_cmd" | jq -R '.' || echo null)" \
        '.categories[0].entries += [{"bind": $bind, "action": $action, "desc": $desc, "exec": $exec_cmd}]' \
-       "$BINDS_FILE" > "$tmp" && mv "$tmp" "$BINDS_FILE"
+       "$BINDS_FILE" > "$tmp" 2>/dev/null; then
+        rm -f "$tmp"
+        notify "Failed to add: jq error"
+        return
+    fi
+    mv "$tmp" "$BINDS_FILE"
 
     notify "Added: $bind → $action"
-
-    # Check for new conflicts
     check_conflicts
 }
 
@@ -111,13 +115,13 @@ edit_keybind() {
     new_bind=$(keycapture 2>/dev/null)
     [ -z "$new_bind" ] && new_bind="$bind"
 
-    new_action=$(input "Edit: action [$action]" <<< "" )
+    new_action=$(echo "" | input "Edit: action [$action]" )
     [ -z "$new_action" ] && new_action="$action"
 
-    new_desc=$(input "Edit: description [$old_desc]" <<< "" )
+    new_desc=$(echo "" | input "Edit: description [$old_desc]" )
     [ -z "$new_desc" ] && new_desc="$old_desc"
 
-    new_exec=$(input "Edit: exec [$old_exec]" <<< "" )
+    new_exec=$(echo "" | input "Edit: exec [$old_exec]" )
     [ -z "$new_exec" ] && new_exec="$old_exec"
 
     local tmp
