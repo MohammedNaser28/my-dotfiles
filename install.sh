@@ -1472,15 +1472,13 @@ main() {
   create_symlinks
   add_summary "Configuration symlinks created in ~/.config"
 
-  step "Building evdev tools (keycap, kbind-daemon)"
-  # shellcheck disable=SC2153
-  if command -v gcc &>/dev/null; then
-    gcc -O2 -o "${HOME}/.local/bin/keycap" "${DOTDIR}/scripts/keycap.c" 2>/dev/null && msg "  keycap" || warn "  keycap build failed"
-    gcc -O2 -o "${HOME}/.local/bin/kbind-daemon" "${DOTDIR}/scripts/kbind-daemon.c" 2>/dev/null && msg "  kbind-daemon" || warn "  kbind-daemon build failed"
+  step "Building evdev daemons"
+  if bash "${DOTDIR}/scripts/build-daemons.sh"; then
+    msg "All daemons built successfully"
   else
-    warn "gcc not found, skipping evdev tool builds"
+    warn "Some daemons failed to build"
   fi
-  add_summary "Evdev tools built"
+  add_summary "evdev daemons built"
 
   step "Building niri-display-manager (Rust TUI)"
   NDM_DIR="${HOME}/.cache/niri-display-manager"
