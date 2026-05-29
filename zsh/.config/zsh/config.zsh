@@ -35,6 +35,11 @@ setopt hist_find_no_dups
 setopt hist_ignore_space
 setopt extended_history
 
+# Atuin — shell history replacement
+if command -v atuin &> /dev/null; then
+  eval "$(atuin init zsh)"
+fi
+
 ##################
 ### Functions  ###
 ##################
@@ -104,6 +109,12 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 
+# zoxide — smarter cd
+if command -v zoxide &> /dev/null; then
+  eval "$(zoxide init zsh)"
+  alias cd='z'
+fi
+
 # System helpers
 alias fixpacman="sudo rm /var/lib/pacman/db.lck"
 alias tarnow='tar -acf '
@@ -153,6 +164,24 @@ alias du='dust'
 # Zsh-specific aliases
 alias zshconfig='$EDITOR ~/.config/zsh/config.zsh'
 
-# Zsh-specific plugins
-# source $HOME/.config/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-# source $HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
+# fzf — fuzzy finder
+if [[ -d /usr/share/fzf ]]; then
+  source /usr/share/fzf/key-bindings.zsh
+  source /usr/share/fzf/completion.zsh
+fi
+
+# fzf theme: use defaults from $FZF_DEFAULT_OPTS if set
+export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:---height 40% --layout=reverse --border}"
+
+# fzf + cd — fuzzy directory jump
+fcd() {
+  local dir
+  if command -v fd &>/dev/null; then
+    dir=$(fd --type d "${1:-.}" 2>/dev/null | fzf +m) && cd "$dir"
+  else
+    dir=$(find "${1:-.}" -type d 2>/dev/null | fzf +m) && cd "$dir"
+  fi
+}
+
+# Ctrl-f — insert selected path on prompt (already handled by fzf key-bindings)
+# Alt-c  — fuzzy cd from anywhere (provided by fzf key-bindings)

@@ -8,6 +8,18 @@
           "action": "Hotkey Overlay",
           "desc": "Built-in niri keybind overlay",
           "exec": "niri msg action show-hotkey-overlay"
+        },
+        {
+          "bind": "Ctrl + H",
+          "action": "open zen",
+          "desc": "zen",
+          "exec": "zen"
+        },
+        {
+          "bind": "MOD + Shift + O",
+          "action": "open browser",
+          "desc": "browser",
+          "exec": "zen"
         }
       ]
     },

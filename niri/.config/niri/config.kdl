@@ -147,7 +147,7 @@ binds {
     MOD+SHIFT+CTRL+J                    { move-column-to-monitor-down; }
 
     // Workspace Management
-    MOD+ESCAPE                          hotkey-overlay-title="Open Overview" repeat=false { toggle-overview; }
+    MOD+ESCAPE                          hotkey-overlay-title="Open Overview" { toggle-overview; }
     MOD+WHEELSCROLLDOWN                 cooldown-ms=100 { focus-workspace-down; }
     MOD+WHEELSCROLLUP                   cooldown-ms=100 { focus-workspace-up; }
 
@@ -234,12 +234,12 @@ layout {
 
     focus-ring {
         width 0
-        active-color "#07070B"
+        active-color "#0E0F13"
     }
 
     insert-hint {
         off
-        color "#07070B"
+        color "#0E0F13"
     }
 
     struts {}

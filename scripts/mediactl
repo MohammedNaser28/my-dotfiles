@@ -3,10 +3,10 @@
 set -euo pipefail
 
 case "${1:-help}" in
-    volume_up)   wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ ;;
-    volume_down) wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- ;;
-    volume_mute) wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle ;;
-    mic_mute)    wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle ;;
+    volume_up)   pactl set-sink-volume @DEFAULT_SINK@ +5% ;;
+    volume_down) pactl set-sink-volume @DEFAULT_SINK@ -5% ;;
+    volume_mute) pactl set-sink-mute @DEFAULT_SINK@ toggle ;;
+    mic_mute)    pactl set-source-mute @DEFAULT_SOURCE@ toggle ;;
 
     brightness_up)   brightnessctl set +10% ;;
     brightness_down) brightnessctl set 10%- ;;

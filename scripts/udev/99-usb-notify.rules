@@ -1,0 +1,8 @@
+# USB (un)plug notification + sound
+# Installed by: ~/.config/scripts/setup-usb-notify.sh
+#
+# The script at /usr/local/bin/usb-notify sends a mako notification
+# and plays a sound via canberra-gtk-play.
+
+ACTION=="add",    KERNEL=="sd[b-z][0-9]", SUBSYSTEM=="block", ENV{ID_BUS}=="usb", RUN+="/usr/local/bin/usb-notify add"
+ACTION=="remove", KERNEL=="sd[b-z][0-9]", SUBSYSTEM=="block",                     RUN+="/usr/local/bin/usb-notify remove"

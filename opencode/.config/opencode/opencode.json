@@ -1,8 +1,8 @@
 {
   "$schema": "https://opencode.ai/config.json",
 
-  "model": "openrouter/google/gemini-2.0-flash-001",
-  "small_model": "openrouter/google/gemini-2.0-flash-001",
+  "model": "gemini-2.0-flash",
+  "small_model": "gemini-2.0-flash",
   "instructions": [
     "AGENTS.md",
     "knowledge/projects.md"
@@ -11,11 +11,11 @@
 
 
   "provider": {
-    "openrouter": {
+    "google": {
       "options": {
-        "apiKey": "YOUR_OPENROUTER_API_KEY",
+        "apiKey": "AIzaSyDvZ67EAvqohNvweWBaJUGRXErFkuWdWXM",
         "websearch_cited": {
-          "model": "google/gemini-2.0-flash-001"
+          "model": "gemini-2.0-flash"
         }
       }
     }

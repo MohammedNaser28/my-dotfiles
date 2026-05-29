@@ -1,4 +1,7 @@
 return {{
+    "wakatime/vim-wakatime",
+    lazy = false,
+}, {
     "lewis6991/async.nvim",
     lazy = true,
 }, {

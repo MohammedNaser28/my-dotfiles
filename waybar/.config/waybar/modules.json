@@ -268,5 +268,12 @@
   "tooltip": true,
   "on-click": "niri msg action switch-layout",
   "on-click-right": "niri msg action switch-layout"
+},
+"custom/prayer": {
+  "exec": "$HOME/.local/bin/prayer-bar",
+  "return-type": "json",
+  "interval": 60,
+  "tooltip": true,
+  "on-click": "$HOME/.local/bin/prayer-bar --notify"
 }
 }

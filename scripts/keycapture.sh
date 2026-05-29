@@ -1,47 +1,72 @@
 #!/usr/bin/env bash
-# Capture a key combination via evdev, with a styled rofi overlay
-# Uses the compiled keycap binary for reliable capture
+# Capture a key combination 
+set -uo pipefail
 
-BIN="${HOME}/.local/bin/keycap"
-SRC="$(dirname "$0")/keycap.c"
 ROFI_THEME="${HOME}/.config/rofi/colors/wallust.rasi"
+FONT="JetBrainsMono Nerd Font Propo 14"
 
-# Build if missing
-if [ ! -x "$BIN" ]; then
-    if command -v gcc &>/dev/null && [ -f "$SRC" ]; then
-        gcc -O2 -o "$BIN" "$SRC" 2>/dev/null || {
-            notify-send -t 3000 "Key Capture" "Build failed: gcc error"
-            exit 1
-        }
-    else
-        notify-send -t 3000 "Key Capture" "keycap binary not found"
-        exit 1
-    fi
+notify-send -t 5000 "⌨ Key Capture" "Press your key combination now" -u critical
+
+# 1) keycap (direct evdev)
+BIN="${HOME}/.local/bin/keycap"
+if [ -x "$BIN" ]; then
+    tmp=$(mktemp /tmp/keycap-XXXX)
+    "$BIN" > "$tmp" 2>/dev/null &
+    KPID=$!
+    (sleep 5 && kill "$KPID" 2>/dev/null) &
+    TPID=$!
+    wait "$KPID" 2>/dev/null
+    kill "$TPID" 2>/dev/null
+    wait 2>/dev/null
+    combo=$(tr -d '\n' < "$tmp" | xargs)
+    rm -f "$tmp"
+    [ -n "$combo" ] && { echo "$combo"; exit 0; }
 fi
 
-KEYCAP_OUT=$(mktemp /tmp/keycap-XXXXXX)
+# 2) wev (Wayland event viewer)
+if command -v wev &>/dev/null; then
+    tmp=$(mktemp /tmp/wevcap-XXXX)
+    wev > "$tmp" 2>/dev/null &
+    WPID=$!
+    (sleep 5 && kill "$WPID" 2>/dev/null) &
+    TPID=$!
+    wait "$WPID" 2>/dev/null
+    kill "$TPID" 2>/dev/null
+    wait 2>/dev/null
 
-# Run keycap in background, save combo to temp file
-"$BIN" > "$KEYCAP_OUT" 2>/dev/null &
-KEYCAP_PID=$!
+    mods=""; key_code=""; key_name=""; state="idle"
+    while IFS= read -r line; do
+        # Track modifier state
+        if [[ "$line" =~ depressed:\ ([0-9a-fA-F]+) ]]; then
+            d=$((16#${BASH_REMATCH[1]}))
+            mods=""
+            ((d & (1<<4))) && mods+="MOD + "
+            ((d & (1<<3))) && mods+="Alt + "
+            ((d & (1<<2))) && mods+="Ctrl + "
+            ((d & (1<<0))) && mods+="Shift + "
+        fi
 
-# Show styled rofi overlay until key is captured
-rofi -e "Press your key combination..." \
-    -theme "$ROFI_THEME" \
-    -font "JetBrainsMono Nerd Font Propo 14" \
-    -theme-str "window {width: 480px;}" &
-ROFI_PID=$!
+        if [[ "$line" =~ key:\ ([0-9]+) ]]; then
+            c="${BASH_REMATCH[1]}"
+            s=1; [[ "$line" =~ state:\ ([0-9]) ]] && s="${BASH_REMATCH[1]}"
+            # Skip modifiers
+            case "$c" in 29|97|56|100|42|54|125|126) continue ;; esac
 
-# Wait for keycap to capture
-wait "$KEYCAP_PID" 2>/dev/null
+            if [ "$s" = "1" ] && [ "$state" = "idle" ]; then
+                key_code="$c"; state="held"
+                read -r nx && [[ "$nx" =~ xkb:\ \'(.+)\' ]] && key_name="${BASH_REMATCH[1]}"
+            elif [ "$s" = "0" ] && [ "$c" = "$key_code" ]; then
+                [ -z "$key_name" ] && { read -r nx; [[ "$nx" =~ xkb:\ \'(.+)\' ]] && key_name="${BASH_REMATCH[1]}"; }
+                echo "${mods}${key_name}"
+                rm -f "$tmp"
+                exit 0
+            fi
+        fi
+    done < "$tmp"
+    rm -f "$tmp"
+fi
 
-# Dismiss rofi
-kill "$ROFI_PID" 2>/dev/null
-wait "$ROFI_PID" 2>/dev/null
-
-COMBIN=$(tr -d '\n' < "$KEYCAP_OUT")
-rm -f "$KEYCAP_OUT"
-
-[ -z "$COMBIN" ] && exit 1
-
-echo "$COMBIN"
+# 3) Fallback
+rofi -dmenu -p "Keybind" -theme "$ROFI_THEME" -font "$FONT" \
+    -theme-str 'window {width: 380px;}' \
+    -theme-str 'entry {placeholder: "e.g. MOD + A";}' 2>/dev/null

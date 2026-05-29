@@ -16,7 +16,7 @@
 #define THRESHOLD 250
 #define WINDOW_MS 40
 #define COOLDOWN_MS 800
-#define BIG_SIZE 72
+#define BIG_SIZE 92
 
 #define CONFIG_DIR "/home/mohammed-niri/.config/niri"
 #define OVERRIDE_FILE CONFIG_DIR "/cursor-override.kdl"

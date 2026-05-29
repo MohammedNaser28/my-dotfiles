@@ -116,6 +116,38 @@ window#waybar {
   color: @color5;
 }
 
+/* ── muslim-linux: prayer-bar ── */
+
+#custom-prayer {
+    color: #94e2d5;
+    padding: 4px 0;
+    font-size: 10px;
+    min-width: 0;
+}
+
+#custom-prayer.idle {
+    color: #94e2d5;
+}
+
+#custom-prayer.soon {
+    color: #f9e2af;
+}
+
+#custom-prayer.urgent {
+    color: #f38ba8;
+    animation: prayer-pulse 1.4s ease-in-out infinite;
+}
+
+#custom-prayer.active {
+    color: #a6e3a1;
+}
+
+@keyframes prayer-pulse {
+    from { opacity: 1;   }
+    50%  { opacity: 0.4; }
+    to   { opacity: 1;   }
+}
+
 #battery.plugged {
   color: @color4;
 }

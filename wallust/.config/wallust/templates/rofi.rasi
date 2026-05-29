@@ -1,3 +1,9 @@
+/*
+ * Wallust-generated rofi theme.
+ * Auto-generated — do not edit directly.
+ * Edit template at: ~/.dotfiles-sevens/wallust/.config/wallust/templates/rofi.rasi
+ */
+
 * {
     background:     {{background}};
     background-alt: {{color8}};
@@ -6,4 +12,132 @@
     border:         {{color12}};
     active:         {{color2}};
     urgent:         {{color1}};
+}
+
+window {
+    background-color: @background;
+    border: 0;
+    border-color: @border;
+    border-radius: 16;
+    width: 400;
+    padding: 0;
+    transparency: "real";
+    cursor: "default";
+}
+
+mainbox {
+    background-color: @background;
+    children: [inputbar, listview, message];
+    spacing: 0;
+    padding: 12;
+}
+
+inputbar {
+    background-color: @background;
+    children: [textbox-prompt-colon, entry, case-indicator];
+    spacing: 10;
+    padding: 12;
+    border-radius: 10;
+    background: @background-alt;
+    margin: 0 0 8 0;
+}
+
+textbox-prompt-colon {
+    background-color: inherit;
+    text-color: @selected;
+    font: "JetBrainsMono Nerd Font Propo 13";
+    padding: 0;
+    expand: false;
+    str: "🔑";
+}
+
+entry {
+    background-color: inherit;
+    text-color: @foreground;
+    cursor: @foreground;
+    font: "JetBrainsMono Nerd Font Propo 13";
+    placeholder: "";
+    placeholder-color: @background-alt;
+    padding: 2 0;
+}
+
+case-indicator {
+    background-color: inherit;
+    text-color: @foreground;
+    font: "JetBrainsMono Nerd Font Propo 11";
+    spacing: 0;
+    padding: 0;
+}
+
+listview {
+    background-color: @background;
+    columns: 1;
+    lines: 8;
+    cycle: true;
+    dynamic: true;
+    spacing: 6;
+    padding: 6;
+    layout: vertical;
+}
+
+element {
+    background-color: @background;
+    text-color: @foreground;
+    font: "JetBrainsMono Nerd Font Propo 12";
+    padding: 10 14;
+    border-radius: 10;
+}
+
+element selected.normal {
+    background-color: @selected;
+    text-color: @background;
+}
+
+element-icon {
+    background-color: inherit;
+    text-color: inherit;
+    size: 0;
+}
+
+element-text {
+    background-color: inherit;
+    text-color: inherit;
+    font: inherit;
+    vertical-align: 0.5;
+    horizontal-align: 0.5;
+    cursor: inherit;
+}
+
+message {
+    background-color: @background;
+    padding: 4;
+    border-radius: 8;
+}
+
+textbox {
+    background-color: @background-alt;
+    text-color: @foreground;
+    font: "JetBrainsMono Nerd Font Propo 12";
+    padding: 8;
+    border-radius: 8;
+}
+
+error-message {
+    background-color: @urgent;
+    text-color: @foreground;
+    font: "JetBrainsMono Nerd Font Propo 12";
+    padding: 8;
+}
+
+button {
+    background-color: @background-alt;
+    text-color: @foreground;
+    font: "JetBrainsMono Nerd Font Propo 12";
+    padding: 8;
+    border-radius: 8;
+}
+
+button selected {
+    background-color: @selected;
+    text-color: @background;
 }

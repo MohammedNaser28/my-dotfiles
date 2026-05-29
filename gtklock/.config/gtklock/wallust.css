@@ -1,5 +1,5 @@
 window {
-    background-color: #002B36;
+    background-color: #0E0F13;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -18,23 +18,23 @@ window {
 #clock-label {
     font-size: 48px;
     font-weight: bold;
-    color: #839496;
+    color: #B6B8BC;
 }
 
 #date-label {
     font-size: 16px;
-    color: #EEE8D5;
+    color: #8E9197;
 }
 
 #input-label {
-    color: #657B83;
+    color: #63666A;
     font-size: 13px;
 }
 
 #input-field {
-    background-color: #073642;
-    color: #839496;
-    border: 1px solid #657B83;
+    background-color: #535353;
+    color: #B6B8BC;
+    border: 1px solid #63666A;
     border-radius: 8px;
     padding: 8px 12px;
     font-size: 14px;
@@ -42,14 +42,14 @@ window {
 }
 
 #input-field:focus {
-    border-color: #268BD2;
-    box-shadow: 0 0 0 1px #268BD2;
+    border-color: #967F69;
+    box-shadow: 0 0 0 1px #967F69;
 }
 
 #unlock-button {
     background-image: none;
-    background-color: #268BD2;
-    color: #839496;
+    background-color: #967F69;
+    color: #B6B8BC;
     border: none;
     border-radius: 8px;
     padding: 8px 16px;
@@ -58,21 +58,21 @@ window {
 }
 
 #unlock-button:hover {
-    background-color: #D33682;
+    background-color: #CA736F;
 }
 
 #error-label {
-    color: #DC322F;
+    color: #5D626B;
     font-size: 13px;
 }
 
 #warning-label {
-    color: #CF9A6B;
+    color: #717D8A;
     font-size: 13px;
 }
 
 #message-box infobar {
-    background-color: #073642;
+    background-color: #535353;
     border-radius: 8px;
 }
 

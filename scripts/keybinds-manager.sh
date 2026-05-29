@@ -5,17 +5,18 @@
 set -uo pipefail
 
 BINDS_FILE="${HOME}/.config/scripts/keybinds.json"
+ROFI_THEME="${HOME}/.config/rofi/colors/wallust.rasi"
 FONT="JetBrainsMono Nerd Font Propo 14"
 
 input() {
     local prompt="$1"
-    rofi -dmenu -p "$prompt" -theme "$HOME/.config/rofi/colors/wallust.rasi" \
-        -font "JetBrainsMono Nerd Font Propo 14" \
-        -theme-str "window {width: 600px;} inputbar {padding: 8px;} entry {placeholder: \"TYPE VALUE\";}" 2>/dev/null
+    rofi -dmenu -p "$prompt" -theme "$ROFI_THEME" \
+        -font "$FONT" \
+        -theme-str "window {width: 380px;} inputbar {padding: 12px 16px;} entry {placeholder: \"TYPE VALUE\";}" 2>/dev/null
 }
 
 notify() {
-    notify-send -t 3000 "Keybinds" "$1" 2>/dev/null || true
+    notify-send -t 3500 "Keybinds" "$1" 2>/dev/null || true
 }
 
 # ── Conflict check ──────────────────────────────────────
@@ -26,15 +27,10 @@ check_conflicts() {
         | group_by(.)
         | .[] | select(length > 1)
         | .[0] + " (" + (length | tostring) + "x)"
-    ' "$BINDS_FILE")
+    ' "$BINDS_FILE" 2>/dev/null)
 
     if [ -z "$conflicts" ]; then
-        notify "No conflicts found"
-    else
-        local msg
-        msg=$(echo "$conflicts" | while read -r line; do echo "⚠ $line"; done)
-        notify "$(echo "$msg" | head -5)"
-        echo "$msg" | vicinae dmenu -n "⚠ Conflicts" --no-section --no-footer -W 600
+        notify "No conflicts"
     fi
 }
 
@@ -47,25 +43,28 @@ view_keybinds() {
         | "\(.bind) │ \(.action) │ \(.desc)"
     ' "$BINDS_FILE" 2>/dev/null) || { notify "Failed to read keybinds"; return; }
     [ -z "$output" ] && { notify "No keybinds found"; return; }
-    echo "$output" | vicinae dmenu -n " Keybinds " -p "Search..." -W 900
+    echo "$output" | rofi -dmenu -p "Search" -theme "$ROFI_THEME" \
+        -theme-str 'window {width: 700px;}' 2>/dev/null
 }
 
 # ── Add keybind ─────────────────────────────────────────
 add_keybind() {
     local bind action desc exec_cmd
 
-    notify "Press your key combination..."
-    bind=$(keycapture 2>/dev/null)
+    notify "Press key combination..."
+    bind=$("${HOME}/.local/bin/keycapture" 2>/dev/null)
     if [ -z "$bind" ]; then
-        notify "Key capture cancelled or failed"
+        notify "Cancelled"
         return
     fi
 
+    notify-send -t 3000 "Captured" "$bind" -u critical
+
     action=$(input "Add: enter action name")
-    [ -z "$action" ] && { notify "Cancelled (no action)"; return; }
+    [ -z "$action" ] && { notify "Cancelled"; return; }
 
     desc=$(input "Add: enter description")
-    [ -z "$desc" ] && { notify "Cancelled (no description)"; return; }
+    [ -z "$desc" ] && { notify "Cancelled"; return; }
 
     exec_cmd=$(input "Add: enter exec command (or leave empty)")
 
@@ -76,12 +75,12 @@ add_keybind() {
        '.categories[0].entries += [{"bind": $bind, "action": $action, "desc": $desc, "exec": $exec_cmd}]' \
        "$BINDS_FILE" > "$tmp" 2>/dev/null; then
         rm -f "$tmp"
-        notify "Failed to add: jq error"
+        notify "Failed: jq error"
         return
     fi
     mv "$tmp" "$BINDS_FILE"
 
-    notify "Added: $bind → $action"
+    notify "Added: $bind"
     check_conflicts
 }
 
@@ -89,20 +88,19 @@ add_keybind() {
 edit_keybind() {
     local chosen bind action
 
-    # Pick entry to edit
     chosen=$(jq -r '.categories[]
         | .name as $cat
         | .entries[]
         | "\(.bind) │ \(.action) │ \(.desc)"
-    ' "$BINDS_FILE" | vicinae dmenu -n " Edit: pick keybind" -p "Search..." -W 900)
+    ' "$BINDS_FILE" 2>/dev/null | rofi -dmenu -p "Edit" -theme "$ROFI_THEME" \
+        -theme-str 'window {width: 700px;}' 2>/dev/null)
 
     [ -z "$chosen" ] && return
 
     bind=$(echo "$chosen" | awk -F' │ ' '{print $1}')
     action=$(echo "$chosen" | awk -F' │ ' '{print $2}')
 
-    # Get current values
-    local old_entry old_desc old_exec
+    local old_desc old_exec
     old_desc=$(jq -r --arg b "$bind" --arg a "$action" '
         .categories[].entries[] | select(.bind == $b and .action == $a) | .desc
     ' "$BINDS_FILE" | head -1)
@@ -112,16 +110,16 @@ edit_keybind() {
 
     local new_bind new_action new_desc new_exec
 
-    new_bind=$(keycapture 2>/dev/null)
+    new_bind=$("${HOME}/.local/bin/keycapture" 2>/dev/null)
     [ -z "$new_bind" ] && new_bind="$bind"
 
-    new_action=$(echo "" | input "Edit: action [$action]" )
+    new_action=$(input "Edit: action [$action]" )
     [ -z "$new_action" ] && new_action="$action"
 
-    new_desc=$(echo "" | input "Edit: description [$old_desc]" )
+    new_desc=$(input "Edit: description [$old_desc]" )
     [ -z "$new_desc" ] && new_desc="$old_desc"
 
-    new_exec=$(echo "" | input "Edit: exec [$old_exec]" )
+    new_exec=$(input "Edit: exec [$old_exec]" )
     [ -z "$new_exec" ] && new_exec="$old_exec"
 
     local tmp
@@ -132,10 +130,9 @@ edit_keybind() {
         (.categories[].entries[] | select(.bind == $ob and .action == $oa)) += {
             bind: $nb, action: $na, desc: $nd, exec: $ne
         }
-    ' "$BINDS_FILE" > "$tmp" && mv "$tmp" "$BINDS_FILE"
+    ' "$BINDS_FILE" > "$tmp" 2>/dev/null && mv "$tmp" "$BINDS_FILE"
 
-    notify "Edited: $bind → $new_bind"
-
+    notify "Edited: $bind"
     check_conflicts
 }
 
@@ -147,7 +144,8 @@ remove_keybind() {
         | .name as $cat
         | .entries[]
         | "\(.bind) │ \(.action) │ \(.desc)"
-    ' "$BINDS_FILE" | vicinae dmenu -n " Remove: pick keybind" -p "Search..." -W 900)
+    ' "$BINDS_FILE" 2>/dev/null | rofi -dmenu -p "Remove" -theme "$ROFI_THEME" \
+        -theme-str 'window {width: 700px;}' 2>/dev/null)
 
     [ -z "$chosen" ] && return
 
@@ -159,16 +157,18 @@ remove_keybind() {
     jq --arg b "$bind" --arg a "$action" '
         del((.categories[].entries[] | select(.bind == $b and .action == $a)))
         | walk(if type == "object" then with_entries(select(.value != null and .value != [])) else . end)
-    ' "$BINDS_FILE" > "$tmp" && mv "$tmp" "$BINDS_FILE"
+    ' "$BINDS_FILE" > "$tmp" 2>/dev/null && mv "$tmp" "$BINDS_FILE"
 
-    notify "Removed: $bind → $action"
+    notify "Removed: $bind"
 }
 
 # ── Main menu ───────────────────────────────────────────
 main_menu() {
     local choice
     choice=$(printf "🔍 View keybinds\n➕ Add keybind\n✏️  Edit keybind\n🗑️  Remove keybind\n⚠️  Check conflicts" \
-        | vicinae dmenu -n " Keybind Manager" -s "Pick an action" -W 500)
+        | rofi -dmenu -p "" -theme "$ROFI_THEME" \
+            -theme-str 'window {width: 360px;}' \
+            -no-custom 2>/dev/null)
 
     case "$choice" in
         *View*) view_keybinds ;;

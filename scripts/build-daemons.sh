@@ -56,6 +56,13 @@ for src in "$SRC_DIR"/*.c; do
                 ((skipped++))
                 continue
             }
+            # hot-corner needs cJSON linked in
+            cjson_src="$SRC_DIR/cJSON.c"
+            if [ -f "$cjson_src" ]; then
+                extra="$extra $cjson_src"
+            else
+                warn "cJSON.c not found at $cjson_src"
+            fi
         fi
         if $CC $CFLAGS $extra -o "$bin" "$src" 2>/tmp/_cs_err.log; then
             ok "$name → $bin"

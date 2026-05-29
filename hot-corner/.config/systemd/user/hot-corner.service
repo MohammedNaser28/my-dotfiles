@@ -1,5 +1,5 @@
 [Unit]
-Description=Hot corner to toggle niri overview (GNOME Activities-style)
+Description=Config-driven hot corners with arbitrary commands
 After=graphical-session.target
 PartOf=graphical-session.target
 
@@ -9,7 +9,8 @@ Restart=on-failure
 RestartSec=2
 Type=simple
 Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
-Environment=DISPLAY=
+Environment=GDK_BACKEND=wayland
+Environment=WAYLAND_DISPLAY=wayland-1
 
 [Install]
 WantedBy=default.target
