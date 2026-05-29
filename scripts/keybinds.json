@@ -57,6 +57,12 @@
           "exec": "vicinae toggle"
         },
         {
+          "bind": "MOD + Space",
+          "action": "App Launcher",
+          "desc": "Open Rofi app launcher (drun)",
+          "exec": "rofi -show drun"
+        },
+        {
           "bind": "MOD + E",
           "action": "File Manager",
           "desc": "Open Thunar GUI",

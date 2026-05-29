@@ -17,6 +17,7 @@
 | `MOD + B`            | Open primary browser (Firefox Developer Edition) |
 | `MOD + Alt + B`      | Open secondary browser (Google Chrome)           |
 | `MOD + A`            | Toggle application launcher (Vicinae)            |
+| `MOD + Space`        | Open application launcher (Rofi)                 |
 | `MOD + E`            | Open file manager (Thunar)                       |
 | `MOD + Alt + E`      | Open TUI file manager (Yazi)                     |
 | `MOD + W`            | Open wallpaper selector                          |
