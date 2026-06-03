@@ -87,6 +87,14 @@
     "on-click": "nvidia-smi",
     "return-type": "json"
   },
+  "custom/gpu-temp": {
+    "format": "󰾲 {}°",
+    "interval": 5,
+    "exec": "nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader 2>/dev/null || echo N/A",
+    "tooltip": true,
+    "tooltip-format": "GPU Temp: {}°C",
+    "on-click": "nvidia-smi"
+  },
   "clock": {
     "interval": 1,
     "format": "{:%I

@@ -17,6 +17,7 @@ window#waybar {
 #memory:hover,
 #temperature:hover,
 #custom-gpu:hover,
+#custom-gpu-temp:hover,
 #disk:hover,
 #custom-keyboard-layout:hover,
 #network:hover,
@@ -33,6 +34,7 @@ window#waybar {
 #memory,
 #temperature,
 #custom-gpu,
+#custom-gpu-temp,
 #disk,
 #custom-keyboard-layout,
 #clock,
@@ -112,7 +114,8 @@ window#waybar {
   color: @color13;
 }
 
-#custom-gpu {
+#custom-gpu,
+#custom-gpu-temp {
   color: @color5;
 }
 

@@ -17,6 +17,9 @@ for p in ~/.local/bin ~/Applications/depot_tools; do
   fi
 done
 
+# Zoxide (smart cd)
+eval "$(zoxide init zsh)"
+
 ######################
 ### Key Bindings  ####
 ######################
