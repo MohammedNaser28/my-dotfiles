@@ -22,7 +22,9 @@ output "DP-1" {
     scale 1
     position x=1920 y=0
 }
-
+output "headless-tablet" {
+    mode "1920x1080@60"
+}
 input {
     keyboard {
         xkb {
@@ -210,6 +212,7 @@ binds {
     MOD+CTRL+S                          { screenshot-window write-to-disk=true; }
     MOD+P                               { spawn-sh "pgrep -x hyprpicker >/dev/null || hyprpicker"; }
     MOD+U                               hotkey-overlay-title="Lock Screen Theme" { spawn-sh "$HOME/.config/scripts/gtklock-theme.sh"; }
+    MOD+G                               hotkey-overlay-title="Mount Game Drives" { spawn-sh "$HOME/.config/scripts/mount_games_hardisks.sh"; }
     MOD+SHIFT+V                         hotkey-overlay-title="Clipboard History" { spawn-sh "$HOME/.config/scripts/clipboard.sh"; }
 
     // Keybind Viewer & Manager
@@ -235,12 +238,12 @@ layout {
 
     focus-ring {
         width 0
-        active-color "#0E0F13"
+        active-color "#070708"
     }
 
     insert-hint {
         off
-        color "#0E0F13"
+        color "#070708"
     }
 
     struts {}
@@ -295,15 +298,6 @@ window-rule {
     match app-id=r#"code"#
     match app-id=r#"obsidian$"#
     open-maximized true
-}
-
-// File dialogs - Open/Save/Select
-window-rule {
-    match title=r#".*(Open|Save|Select).*"#
-    open-floating true
-    default-column-width { proportion 0.0; }
-    max-width 800
-    max-height 1000
 }
 
 window-rule {
