@@ -5,13 +5,13 @@
  */
 
 * {
-    background:     #0E0F13;
-    background-alt: #63666A;
-    foreground:     #B6B8BC;
-    selected:       #967F69;
-    border:         #967F69;
-    active:         #907C82;
-    urgent:         #5D626B;
+    background:     #070708;
+    background-alt: #5B5B5C;
+    foreground:     #ADAEAE;
+    selected:       #8E8F91;
+    border:         #8E8F91;
+    active:         #6C6C6E;
+    urgent:         #4B4B4D;
 }
 
 window {

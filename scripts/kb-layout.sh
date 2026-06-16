@@ -4,10 +4,7 @@ idx=$(echo "$layouts" | jq -r '.current_idx')
 name=$(echo "$layouts" | jq -r ".names[$idx]")
 
 if [ "$1" = "--cycle" ]; then
-  total=$(echo "$layouts" | jq -r '.names | length')
-  next=$(( (idx + 1) % total ))
-  next_name=$(echo "$layouts" | jq -r ".names[$next]")
-  niri msg action switch-layout "$next_name"
+  niri msg action switch-layout next
   exit 0
 fi
 
