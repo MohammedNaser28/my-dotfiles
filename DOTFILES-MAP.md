@@ -125,7 +125,7 @@
 ### Package: `scripts`
 - **Managed by**: Custom bash loop in `stow.sh` (lines 38-70) — **NOT** by the `stow` binary. Running `stow scripts` alone does not work; you must run `stow.sh`.
 - **Creates**: Directory symlink `~/.config/scripts/` → `$DOT/scripts/` so that paths like `$HOME/.config/scripts/gpu-stats.sh` resolve
-- **Also creates individual symlinks in `~/.local/bin/`**: bgselector.sh, clipboard.sh, git-cleanup.sh, gpu-stats.sh, kb-layout.sh, kb-cycle.sh, low-battery-notify.sh, media-control.sh, theme-sync.sh, keybinds-view.sh, keybinds-manager.sh, keycapture.sh, cache-palettes.sh, palette-view.sh, mount_games_hardisks.sh, mediactl, keybinds.json, lib/
+- **Also creates individual symlinks in `~/.local/bin/`**: bgselector.sh, clipboard.sh, git-cleanup.sh, gpu-stats.sh, kb-layout.sh, low-battery-notify.sh, media-control.sh, theme-sync.sh, keybinds-view.sh, keybinds-manager.sh, keycapture.sh, cache-palettes.sh, palette-view.sh, mount_games_hardisks.sh, mediactl, keybinds.json, lib/
 - **Also compiles C sources** to `~/.local/bin/`: keycap, kbind-daemon, cursor-speeder, hot-corner (needs GTK)
 - **External builds**: niri-display-manager (Rust, from separate repo)
 - **Purpose**: Custom scripts for wallpaper management, keyboard layout, GPU stats, media control, clipboard, backups, game drive mounting, etc.

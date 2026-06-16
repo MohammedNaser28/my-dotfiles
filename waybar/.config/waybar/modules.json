@@ -274,8 +274,8 @@
   "exec": "$HOME/.config/scripts/kb-layout.sh",
   "return-type": "json",
   "tooltip": true,
-  "on-click": "$HOME/.config/scripts/kb-cycle.sh",
-  "on-click-right": "$HOME/.config/scripts/kb-cycle.sh"
+  "on-click": "niri msg action switch-layout",
+  "on-click-right": "niri msg action switch-layout"
 },
 "custom/prayer": {
   "exec": "$HOME/.local/bin/prayer-bar",
