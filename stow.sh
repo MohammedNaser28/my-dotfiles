@@ -39,7 +39,7 @@ echo "==> Symlinking scripts..."
 mkdir -p "$HOME/.local/bin"
 # ~/.config/scripts -> dotfiles/scripts (so $HOME/.config/scripts/* paths work)
 ln -sfT "$DOT/scripts" "$HOME/.config/scripts"
-for script in bgselector.sh clipboard.sh git-cleanup.sh gpu-stats.sh kb-layout.sh low-battery-notify.sh media-control.sh theme-sync.sh keybinds-view.sh keybinds-manager.sh keycapture.sh cache-palettes.sh palette-view.sh; do
+for script in bgselector.sh clipboard.sh git-cleanup.sh gpu-stats.sh kb-layout.sh kb-cycle.sh low-battery-notify.sh media-control.sh theme-sync.sh keybinds-view.sh keybinds-manager.sh keycapture.sh cache-palettes.sh palette-view.sh mount_games_hardisks.sh; do
     ln -sf "$DOT/scripts/$script" "$HOME/.local/bin/$script"
 done
 ln -sf "$DOT/scripts/lib" "$HOME/.local/bin/lib"
