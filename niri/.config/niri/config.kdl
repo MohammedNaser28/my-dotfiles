@@ -11,20 +11,12 @@ spawn-at-startup "sh" "-c" "sleep 2 && cursor-speeder"
 prefer-no-csd
 screenshot-path "~/Pictures/Screenshots/%Y-%m-%d %H-%M-%S.png"
 
-output "eDP-1" {
-    mode "1920x1080@144.000"
-    scale 1
-    position x=0 y=0
-}
-
-output "DP-1" {
-    mode "2560x1440@59.951"
-    scale 1
-    position x=1920 y=0
-}
-output "headless-tablet" {
-    mode "1920x1080@60"
-}
+// Outputs are auto-detected. Uncomment and customize for your monitors:
+// output "eDP-1" {
+//     mode "1920x1080@144"
+//     scale 1
+//     position x=0 y=0
+// }
 input {
     keyboard {
         xkb {
@@ -81,8 +73,6 @@ binds {
     MOD+E                               hotkey-overlay-title="File Manager: Thunar" { spawn-sh "thunar"; }
     MOD+ALT+E                           hotkey-overlay-title="File Manager: Yazi" { spawn-sh "yazi"; }
     MOD+W                               hotkey-overlay-title="Open Wallpaper Selector" { spawn-sh "$HOME/.config/scripts/bgselector.sh"; }
-    MOD+SHIFT+P                         hotkey-overlay-title="Palette Manager" { spawn-sh "$HOME/.config/scripts/palette.sh"; }
-    MOD+ALT+P                           hotkey-overlay-title="Browse Color Palettes" { spawn-sh "$HOME/.config/scripts/palette-view.sh"; }
 
     // Media Keys
     XF86AudioRaiseVolume                allow-when-locked=true { spawn-sh "mediactl volume_up"; }
@@ -93,7 +83,7 @@ binds {
     XF86AudioMicMute                    allow-when-locked=true { spawn-sh "mediactl mic_mute"; }
     XF86AudioNext                       allow-when-locked=true { spawn-sh "mediactl next_track"; }
     XF86AudioPause                      allow-when-locked=true { spawn-sh "mediactl play_pause"; }
-    XF86AudioPlay                       allow-when-locked=true { spawn-sh "mediactl play_pausse"; }
+    XF86AudioPlay                       allow-when-locked=true { spawn-sh "mediactl play_pause"; }
     XF86AudioPrev                       allow-when-locked=true { spawn-sh "mediactl prev_track"; }
 
     // Window Management
@@ -211,8 +201,6 @@ binds {
     MOD+SHIFT+S                         { screenshot-screen write-to-disk=true; }
     MOD+CTRL+S                          { screenshot-window write-to-disk=true; }
     MOD+P                               { spawn-sh "pgrep -x hyprpicker >/dev/null || hyprpicker"; }
-    MOD+U                               hotkey-overlay-title="Lock Screen Theme" { spawn-sh "$HOME/.config/scripts/gtklock-theme.sh"; }
-    MOD+G                               hotkey-overlay-title="Mount Game Drives" { spawn-sh "$HOME/.config/scripts/mount_games_hardisks.sh"; }
     MOD+SHIFT+V                         hotkey-overlay-title="Clipboard History" { spawn-sh "$HOME/.config/scripts/clipboard.sh"; }
 
     // Keybind Viewer & Manager
@@ -238,12 +226,12 @@ layout {
 
     focus-ring {
         width 0
-        active-color "#070708"
+        active-color "#0C0D0F"
     }
 
     insert-hint {
         off
-        color "#070708"
+        color "#0C0D0F"
     }
 
     struts {}

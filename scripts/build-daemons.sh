@@ -49,22 +49,7 @@ for src in "$SRC_DIR"/*.c; do
     bin="$BIN_DIR/$name"
 
     if [ "$src" -nt "$bin" ] || [ ! -f "$bin" ]; then
-        extra=""
-        if [ "$name" = "hot-corner" ]; then
-            extra=$(pkg-config --cflags --libs gtk+-3.0 gtk-layer-shell-0 2>/dev/null) || {
-                warn "Missing gtk-layer-shell (skip $name)"
-                ((skipped++))
-                continue
-            }
-            # hot-corner needs cJSON linked in
-            cjson_src="$SRC_DIR/cJSON.c"
-            if [ -f "$cjson_src" ]; then
-                extra="$extra $cjson_src"
-            else
-                warn "cJSON.c not found at $cjson_src"
-            fi
-        fi
-        if $CC $CFLAGS $extra -o "$bin" "$src" 2>/tmp/_cs_err.log; then
+        if $CC $CFLAGS -o "$bin" "$src" 2>/tmp/_cs_err.log; then
             ok "$name → $bin"
             ((++compiled))
         else

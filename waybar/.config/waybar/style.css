@@ -16,8 +16,6 @@ window#waybar {
 #cpu:hover,
 #memory:hover,
 #temperature:hover,
-#custom-gpu:hover,
-#custom-gpu-temp:hover,
 #disk:hover,
 #custom-keyboard-layout:hover,
 #network:hover,
@@ -33,8 +31,6 @@ window#waybar {
 #cpu,
 #memory,
 #temperature,
-#custom-gpu,
-#custom-gpu-temp,
 #disk,
 #custom-keyboard-layout,
 #clock,
@@ -112,11 +108,6 @@ window#waybar {
 
 #custom-keyboard-layout {
   color: @color13;
-}
-
-#custom-gpu,
-#custom-gpu-temp {
-  color: @color5;
 }
 
 /* ── muslim-linux: prayer-bar ── */

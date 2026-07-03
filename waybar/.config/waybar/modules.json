@@ -79,22 +79,6 @@
     "tooltip-format": "CPU Temp: {temperatureC}°C",
     "critical-threshold": 85
   },
-  "custom/gpu": {
-    "format": "󰢮 {}",
-    "interval": 10,
-    "exec": "$HOME/.config/scripts/gpu-stats.sh",
-    "tooltip": true,
-    "on-click": "nvidia-smi",
-    "return-type": "json"
-  },
-  "custom/gpu-temp": {
-    "format": "󰾲 {}°",
-    "interval": 5,
-    "exec": "nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader 2>/dev/null || echo N/A",
-    "tooltip": true,
-    "tooltip-format": "GPU Temp: {}°C",
-    "on-click": "nvidia-smi"
-  },
   "clock": {
     "interval": 1,
     "format": "{:%I

@@ -1,1 +1,0 @@
-Write a git commit message for the changes I just made or described. Follow Conventional Commits format: `type(scope): short description`. Types: feat, fix, refactor, docs, test, ci, chore. Keep the subject line under 72 chars. Add a body paragraph only if the change is non-obvious or has important context. No bullet lists in the body.

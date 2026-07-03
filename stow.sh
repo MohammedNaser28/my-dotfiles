@@ -22,7 +22,7 @@ if command -v git-lfs &>/dev/null && [[ -d "$DOT/wallpapers/.git" ]]; then
 fi
 
 echo "==> Stowing .config/ packages..."
-for pkg in alacritty fastfetch fish gtklock kitty mako niri nvim rofi systemd vicinae wallust waybar yazi zathura hypr btop opencode kbind-daemon; do
+for pkg in alacritty fastfetch fish gtklock kitty mako niri nvim rofi systemd vicinae wallust waybar yazi zathura btop kbind-daemon; do
     stow -d "$DOT" -t "$HOME" "$pkg" 2>/dev/null && echo "  $pkg" || echo "  $pkg (skipped)"
 done
 
@@ -39,7 +39,7 @@ echo "==> Symlinking scripts..."
 mkdir -p "$HOME/.local/bin"
 # ~/.config/scripts -> dotfiles/scripts (so $HOME/.config/scripts/* paths work)
 ln -sfT "$DOT/scripts" "$HOME/.config/scripts"
-for script in bgselector.sh clipboard.sh git-cleanup.sh gpu-stats.sh kb-layout.sh low-battery-notify.sh media-control.sh theme-sync.sh keybinds-view.sh keybinds-manager.sh keycapture.sh cache-palettes.sh palette-view.sh; do
+for script in bgselector.sh clipboard.sh kb-layout.sh theme-sync.sh keybinds-view.sh keybinds-manager.sh keycapture.sh; do
     ln -sf "$DOT/scripts/$script" "$HOME/.local/bin/$script"
 done
 ln -sf "$DOT/scripts/lib" "$HOME/.local/bin/lib"
@@ -47,10 +47,13 @@ ln -sf "$DOT/scripts/keybinds.json" "$HOME/.local/bin/keybinds.json"
 ln -sf "$DOT/scripts/keybinds-view.sh" "$HOME/.local/bin/keybinds-view"
 ln -sf "$DOT/scripts/keybinds-manager.sh" "$HOME/.local/bin/keybinds-manager"
 ln -sf "$DOT/scripts/keycapture.sh" "$HOME/.local/bin/keycapture"
+ln -sf "$DOT/scripts/lockscreen.sh" "$HOME/.local/bin/lockscreen.sh"
 ln -sf "$DOT/scripts/mediactl" "$HOME/.local/bin/mediactl"
+ln -sf "$DOT/scripts/build-daemons.sh" "$HOME/.local/bin/build-daemons.sh"
 echo "==> Building evdev tools..."
 gcc -O2 -o "$HOME/.local/bin/keycap" "$DOT/scripts/keycap.c" 2>/dev/null && echo "  keycap" || echo "  keycap (build failed)"
 gcc -O2 -o "$HOME/.local/bin/kbind-daemon" "$DOT/scripts/kbind-daemon.c" 2>/dev/null && echo "  kbind-daemon" || echo "  kbind-daemon (build failed)"
+gcc -O2 -o "$HOME/.local/bin/cursor-speeder" "$DOT/scripts/cursor-speeder.c" 2>/dev/null && echo "  cursor-speeder" || echo "  cursor-speeder (build failed)"
 
 echo "==> Building niri-display-manager (Rust TUI)..."
 if command -v cargo &>/dev/null; then
@@ -70,4 +73,4 @@ fi
   echo "  scripts"
 
 echo "==> Done! All dotfiles linked."
-echo "    Forked from: https://github.com/saatvik333/niri-dotfiles.git"
+echo "    Based on: https://github.com/saatvik333/niri-dotfiles.git"

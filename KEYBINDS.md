@@ -146,5 +146,4 @@
 | `MOD + Shift + S` | Screenshot entire screen    |
 | `MOD + Ctrl + S`  | Screenshot current window   |
 | `MOD + P`         | Color picker (hyprpicker)   |
-| `MOD + G`         | Mount game drives (HDD/SSD) |
 | `MOD + Alt + W`   | Restart Waybar              |

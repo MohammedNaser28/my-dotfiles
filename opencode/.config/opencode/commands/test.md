@@ -1,1 +1,0 @@
-Write tests for the current file or function. For Go: use the standard `testing` package, table-driven tests with `t.Run`. For Rust: use `#[cfg(test)]` module with `#[test]` functions. Cover: happy path, edge cases (empty input, nil/None, boundary values), and at least one error case. Don't use external test frameworks unless they're already in go.mod / Cargo.toml.

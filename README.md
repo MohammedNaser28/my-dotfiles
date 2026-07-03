@@ -1,186 +1,98 @@
-# dotfiles-sevens
+# dotfiles (general edition)
 
-Niri compositor dotfiles for Arch Linux, forked from
-[saatvik333/niri-dotfiles](https://github.com/saatvik333/niri-dotfiles).
+Niri compositor dotfiles for Wayland, managed with **GNU Stow**.
 
-## Architecture
+Forked from [saatvik333/niri-dotfiles](https://github.com/saatvik333/niri-dotfiles).
 
-Dotfiles are managed with **GNU Stow**. Each application lives in its own
-directory with the full `$HOME`-relative path:
+## Quick start
+
+```bash
+git clone --recursive https://github.com/MohammedNaser28/my-dotfiles.git ~/.dotfiles-sevens
+cd ~/.dotfiles-sevens
+./install.sh --packages --yay   # Optional: install all dependencies (Arch)
+./stow.sh                       # Link configs to $HOME
+```
+
+## Structure
+
+Each app lives in its own directory with `$HOME`-relative paths:
 
 ```
 ~/.dotfiles-sevens/waybar/.config/waybar/config.jsonc
   └── stows to ──> ~/.config/waybar/config.jsonc (symlink)
 ```
 
-Side projects integrate by **hardlinking** their config files into the stow
-tree so git tracks them alongside the main dotfiles.
+### Packages
 
-## Directory map
-
-```
-~/.dotfiles-sevens/
-├── install.sh              Full automated installer (Arch only)
-├── stow.sh                 GNU Stow symlink setup
-│
-├── alacritty/              Terminal emulator
-├── btop/                   System monitor
-├── fastfetch/              System fetch tool
-├── fish/                   Fish shell (default)
-├── git/                    Global .gitconfig
-├── gtk/                    GTK3 settings + Colloid theme
-├── gtklock/                Lock screen (11 themes)
-├── hypr/                   Hyprland stub (compat)
-├── kitty/                  Kitty terminal (fallback)
-├── mako/                   Notification daemon
-├── niri/                   Main compositor config (431 lines)
-├── nvim/                   LazyVim-based editor
-├── opencode/               OpenCode AI assistant config
-├── pavucontrol/            Audio panel presets
-├── rofi/                   Application launcher + powermenu
-├── scripts/                ~40 helpers (see below)
-├── starship/               Shell prompt
-├── systemd/                User service units
-├── vicinae/                App launcher
-├── wallpapers/             Git-LFS submodule (~170 images)
-├── wallust/                Theme engine + 13 templates
-├── waybar/                 Vertical status bar
-├── yazi/                   File manager
-├── zathura/                PDF viewer
-└── zsh/                    Zsh config (fallback shell)
-```
-
-## Key components
-
-### Waybar (vertical, 72px wide)
-
-Three sections in a left sidebar:
-
-| Section | Modules |
+| Package | Purpose |
 |---------|---------|
-| **Left** (top) | Cachy, clock, CPU, memory, disk, temperature, GPU, keyboard layout |
-| **Center** (middle) | Prayer times, MPRIS (media), Niri workspaces, privacy indicator |
-| **Right** (bottom) | Extras tray, network, bluetooth, microphone, audio slider, brightness, battery, powermenu |
+| `niri` | Scrollable-tiling Wayland compositor |
+| `waybar` | Vertical status bar (left side, 72px) |
+| `alacritty` | GPU-accelerated terminal |
+| `kitty` | Feature-rich fallback terminal |
+| `fish` | Interactive shell (primary) |
+| `zsh` | Fallback shell config |
+| `starship` | Cross-shell prompt |
+| `rofi` | App launcher + powermenu + wallpaper picker UI |
+| `vicinae` | Web-search-style app launcher |
+| `mako` | Notification daemon |
+| `gtklock` | Swaylock-compatible lockscreen |
+| `wallust` | Wallpaper-driven color engine (13+ app templates) |
+| `fastfetch` | System fetch tool |
+| `btop` | System monitor |
+| `nvim` | LazyVim-based Neovim config |
+| `yazi` | Terminal file manager |
+| `zathura` | PDF viewer |
+| `gtk` | GTK3/GTK4 settings |
+| `systemd` | User service units |
 
-Modules are defined in `modules.json` (279 lines) using Nerd Font icons.
-Style uses `@import "./colors.css"` — 16 `@define-color` variables generated
-by wallust from the current wallpaper.
+### Scripts
 
-### Wallust theme engine
-
-Wallpaper → color extraction pipeline:
-
-```
-bgselector.sh  ──>  picks wallpaper  ──>  theme-sync.sh
-                                                │
-                          ┌─────────────────────┤
-                          ▼                     ▼
-                     wallust               GTK theme
-                     (13 templates)         + icon theme
-                          │                     │
-                          ▼                     ▼
-                   alacritty, kitty,        Colloid-Dark-Nord
-                   waybar, mako, rofi,      (mapped from wallpaper path)
-                   nvim, zathura, gtklock,
-                   vscode, vicinae, dunst
-```
-
-`wallust.toml` uses `fastresize` backend with `lab` color space and
-`harddark` palette. Templates live in `wallust/templates/` and use
-`{{mustache}}` interpolation for the 16 extracted colors.
-
-### C daemons (compiled locally)
-
-| Daemon | Source | Purpose |
-|--------|--------|---------|
-| `hot-corner` | `scripts/hot-corner.c` | GTK3 layer-shell — configurable hotspot zones |
-| `kbind-daemon` | `scripts/kbind-daemon.c` | Evdev key rebinding for ASUS Fn keys niri can't capture |
-| `cursor-speeder` | `scripts/cursor-speeder.c` | Enlarges cursor on fast mouse movement |
-| `keycap` | `scripts/keycap.c` | Captures evdev combos → "MOD + Shift + A" format |
-
-Compiled by `scripts/build-daemons.sh`, run as systemd user services.
-
-### Scripts directory
+Key scripts in `~/.config/scripts/`:
 
 | Script | Purpose |
 |--------|---------|
-| `bgselector.sh` | Wallpaper picker (rofi + thumbnails + multi-monitor) |
-| `theme-sync.sh` | Full theme sync (755 lines) — wallpaper → GTK/icons/wallust/VSCode/niri/mako/vicinae |
-| `gtklock-theme.sh` | Lock screen theme selector (rofi grid, 12 themes) |
-| `palette.sh` | Palette manager via vicinae dmenu |
-| `keybinds-manager.sh` | Add/edit/remove/check keybinds |
-| `keybinds-view.sh` | Search keybinds with exec-on-select |
-| `media-control.sh` | Volume/brightness/media keys |
-| `gpu-stats.sh` | NVIDIA GPU stats JSON for Waybar |
-| `kb-layout.sh` | Keyboard layout indicator JSON |
-| `curator.py` | Flask web UI for wallpaper collection management |
+| `bgselector.sh` | Wallpaper picker with rofi + thumbnails |
+| `theme-sync.sh` | Triggers wallust to regenerate colors for all apps |
+| `lockscreen.sh` | Lock screen wrapper |
+| `kb-layout.sh` | Keyboard layout indicator for Waybar |
+| `clipboard.sh` | Clipboard history viewer |
+| `mediactl` | Volume/brightness/media key handler |
+| `keybinds-view.sh` | Interactive keybind reference |
+| `keybinds-manager.sh` | Add/edit/remove keybinds |
 
-### Side-project integration
+### Daemons (compiled from C)
 
-External projects hook into the dotfiles by **hardlinking** their config files
-into the stow tree. Example with `muslim-dotfiles`:
+| Daemon | Purpose |
+|--------|---------|
+| `kbind-daemon` | Evdev key rebinding for keys niri can't capture |
+| `cursor-speeder` | Enlarges cursor on fast mouse movement |
+| `keycap` | Captures evdev combos → readable format |
 
-```
-# Waybar configs are hardlinked so changes in either place are shared:
-~/.dotfiles-sevens/waybar/.config/waybar/
-├── config.jsonc       <── hardlinked with muslim-dotfiles/waybar/...
-├── modules.json       <── modified in-place to add custom/prayer module
-└── style.css          <── modified in-place to add prayer CSS rules
-```
+### Themes
 
-This means:
-- Git tracks the changes from the side project in the main dotfiles repo
-- The side project can stay in its own repo with its own history
-- Changes made while tweaking the side project appear in `git status` here
+Color scheme is driven by **wallust** — change wallpaper → colors update across all apps automatically.
 
-### Systemd user services
-
-```
-~/.config/systemd/user/
-├── hot-corner.service          # Enabled by default
-├── kbind-daemon.service        # Enabled by default
-├── low-battery-notify.service  # Enabled by default
-├── gtklock.service             # Manual trigger only
-└── default.target.wants/       # Symlinks to enabled services
-```
-
-Third-party daemons (e.g. zekr-daemon from muslim-dotfiles) install their
-own service unit to the same directory.
-
-## Quick start
-
-### Fresh install
-
-```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/MohammedNaser28/my-dotfiles/main/install.sh)
-```
-
-### Manual setup
-
-```bash
-git clone --recursive git@github.com:MohammedNaser28/my-dotfiles.git ~/.dotfiles-sevens
-cd ~/.dotfiles-sevens
-./stow.sh
-```
-
-`stow.sh` handles: submodule init, LFS pull, symlink creation, and daemon
-compilation.
-
-### Adding a new app config
-
-```bash
-cd ~/.dotfiles-sevens
-mkdir -p myapp/.config/myapp
-cp ~/.config/myapp/config.toml myapp/.config/myapp/config.toml
-stow -d "$PWD" -t "$HOME" myapp
-git add myapp && git commit -m "Add myapp config"
-```
+GTK themes (installed separately): Colloid-Dark, Rose-Pine (moon), Osaka (solarized).
 
 ## Keybinds
 
-See [KEYBINDS.md](KEYBINDS.md) for the full 463-entry keybind database
-covering: window management, workspace switching, media, screenshots,
-clipboard, display, color picker, and more.
+See [KEYBINDS.md](KEYBINDS.md) for full reference. MOD = Super/Windows key.
+
+| Binding | Action |
+|---------|--------|
+| `MOD + Return` | Terminal |
+| `MOD + Space` | Rofi launcher |
+| `MOD + A` | Vicinae toggle |
+| `MOD + H/J/K/L` | Focus window |
+| `MOD + Shift + H/J/K/L` | Move window |
+| `MOD + T` | Toggle floating |
+| `MOD + F` | Fullscreen |
+| `MOD + 1-9` | Switch workspace |
+
+## Website
+
+The project has a landing page at **[niri-dots.pages.dev](https://niri-dots.pages.dev)** — built from `docs/index.html` and auto-deployed by GitHub Actions.
 
 ## License
 

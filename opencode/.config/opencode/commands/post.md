@@ -1,1 +1,0 @@
-Write a social media post about what I just described or built. Give me two versions: 1) Egyptian Arabic dialect for Instagram/Twitter — casual, short, punchy. 2) English LinkedIn post — hook first, no "I'm excited to share", max 120 words, max 3 hashtags. Label each version clearly.
